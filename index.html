@@ -141,14 +141,15 @@
     <!-- 信息池看板 -->
     <section class="page show" id="page-pool">
       <h1 class="page-title">信息池看板</h1>
-      <p class="page-sub">每日 8:00 自动搜集更新 · 仅 2027 届 · 已排除社招 · 来源：国资委 / 中国公共招聘网 / 国聘网 / 各集团与大厂官网</p>
+      <p class="page-sub">每日 8:00 自动搜集更新 · 14 个信息渠道 · 仅 2027 届 · 已排除社招 · 数据日期 2026-09-14</p>
       <div class="rec-card" id="dailyRec"></div>
       <div class="grid-stats" id="poolStats"></div>
       <div class="toolbar">
         <select id="fCat"><option value="">全部类别</option><option value="央国企">央国企</option><option value="互联网大厂">互联网大厂</option></select>
-        <select id="fStatus"><option value="">全部状态</option><option value="open">报名中</option><option value="urgent">即将截止</option><option value="closed">已截止</option></select>
+        <select id="fStatus"><option value="">全部状态</option><option value="notclosed">全部未截止</option><option value="open">报名中</option><option value="urgent">即将截止</option><option value="closed">已截止</option></select>
         <input id="fSearch" placeholder="搜索单位 / 岗位 / 关键词" style="flex:1;min-width:180px">
         <button class="btn ghost" id="btnRefresh">↻ 刷新数据</button>
+        <span id="poolCount" class="muted" style="margin-left:auto"></span>
       </div>
       <div class="card" style="padding:0;overflow:auto">
         <table id="poolTable"><thead><tr>
@@ -374,7 +375,7 @@ function refreshDailyRec(){
   toast('已换一批今日推荐');
 }
 function renderPool(){
-  if(!dataOk()){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">未找到 recruit-seed.js，请将本文件与 recruit-seed.js / recruit-data.json 放在同一目录。</td></tr>'; $('#poolStats').innerHTML=''; return; }
+  if(!dataOk()){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">未找到 recruit-seed.js，请将本文件与 recruit-seed.js / recruit-data.json 放在同一目录。</td></tr>'; $('#poolStats').innerHTML=''; $('#poolCount').textContent=''; return; }
   const recs=RECRUIT.records;
   let total=recs.length,open=0,urgent=0,closed=0;
   recs.forEach(r=>{const s=statusOf(r); if(s.key==='closed')closed++; else{open++; if(s.key==='urgent')urgent++;}});
@@ -387,11 +388,13 @@ function renderPool(){
   const list=recs.filter(r=>{
     const s=statusOf(r);
     if(cat && r.category!==cat) return false;
-    if(st && s.key!==st) return false;
+    if(st==='notclosed' && s.key==='closed') return false;
+    if(st && st!=='notclosed' && s.key!==st) return false;
     if(kw && !(r.org+r.position+r.source+(r.deadlineNote||'')).toLowerCase().includes(kw)) return false;
     return true;
   }).sort((a,b)=>{ const da=a.deadline||'9999-12-31', db=b.deadline||'9999-12-31'; return da<db?-1:da>db?1:0; });
-  if(!list.length){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">无匹配记录</td></tr>'; return; }
+  $('#poolCount').textContent='共 '+recs.length+' 条 · 当前显示 '+list.length+' 条';
+  if(!list.length){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">无匹配记录，试试清除筛选条件</td></tr>'; return; }
   $('#poolTable tbody').innerHTML=list.map(r=>{
     const s=statusOf(r); const badge=r.category==='央国企'?'badge-soe':'badge-net';
     const stcls=s.key==='closed'?'st-closed':s.key==='urgent'?'st-urgent':'st-open';
@@ -424,7 +427,7 @@ $('#fCat').addEventListener('change',renderPool);
 $('#fStatus').addEventListener('change',renderPool);
 $('#fSearch').addEventListener('input',renderPool);
 $('#btnRefresh').addEventListener('click',()=>{
-  const s=document.createElement('script'); s.src='recruit-seed.js?v='+Date.now(); s.onload=()=>{ RECRUIT=window.__RECRUIT_DATA__; renderPool(); toast('信息池已刷新'); }; s.onerror=()=>toast('未找到外部 recruit-seed.js，继续使用内嵌数据'); document.body.appendChild(s);
+  const s=document.createElement('script'); s.src='recruit-seed.js?v='+Date.now(); s.onload=()=>{ RECRUIT=window.__RECRUIT_DATA__; renderPool(); toast('信息池已刷新：'+RECRUIT.records.length+' 条'); }; s.onerror=()=>{ if(location.protocol==='file:'){ toast('请把 recruit-seed.js 与本文件放同一目录后重试'); } else { toast('已是最新数据：网页版每日 8:00 自动更新，无需手动刷新'); } }; document.body.appendChild(s);
 });
 
 /* ============ 岗位管理 ============ */
