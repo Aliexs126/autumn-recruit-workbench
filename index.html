@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>秋招信息工作台 · 2027届</title>
+<style>
+  :root{
+    --cream:#FAF8F3; --cream2:#F3EEE5; --panel:#FFFFFF;
+    --ink:#2E2A33; --muted:#8A8493; --line:#ECE5DA;
+    --purple:#E7DEF7; --purple-d:#B49BDB; --purple-deep:#6E52A6;
+    --coral:#FF7A66; --coral-d:#E85C47; --coral-soft:#FFE6E0;
+    --serif:"Songti SC","Noto Serif SC",Georgia,"Times New Roman",serif;
+    --sans:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    /* 动效缓动曲线（强 ease-out，内置缓动太弱） */
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+    --ease-drawer:cubic-bezier(0.32,0.72,0,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--cream);color:var(--ink);font-family:var(--sans);line-height:1.6}
+  .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+  /* sidebar */
+  .side{background:linear-gradient(180deg,#EFE7FA,#E3D8F3);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto}
+  .brand{font-family:var(--serif);font-size:22px;font-weight:800;color:var(--purple-deep);margin-bottom:4px;line-height:1.25}
+  .brand small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
+  .nav-btn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);
+    padding:11px 12px;border-radius:12px;font-size:14px;cursor:pointer;font-family:var(--sans);
+    transition:background-color 150ms ease, transform 150ms var(--ease-out), box-shadow 150ms ease}
+  .nav-btn .ic{font-size:16px;width:20px;text-align:center}
+  .nav-btn:hover{background:rgba(255,255,255,.55)}
+  .nav-btn:active{transform:scale(0.98)}
+  .nav-btn.active{background:#fff;color:var(--purple-deep);font-weight:700;box-shadow:0 4px 14px rgba(110,82,166,.12)}
+  .side .foot{margin-top:auto;font-size:11px;color:var(--muted);padding-top:14px;border-top:1px solid rgba(110,82,166,.18)}
+  /* main */
+  .main{padding:26px 30px 60px;overflow:auto}
+  h1,h2,h3{font-family:var(--serif);font-weight:800}
+  .page-title{font-size:26px;margin:0 0 2px}
+  .page-sub{color:var(--muted);font-size:13px;margin:0 0 20px}
+  .page{display:none} .page.show{display:block;animation:fade .18s var(--ease-out)}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 18px rgba(110,82,166,.05);
+    transition:box-shadow 220ms var(--ease-out), transform 220ms var(--ease-out), border-color 200ms ease}
+  @media (hover:hover) and (pointer:fine){
+    .card:hover{box-shadow:0 12px 32px rgba(110,82,166,.12);transform:translateY(-2px);border-color:var(--purple-d)}
+    .rec-item:hover{box-shadow:0 10px 26px rgba(232,92,71,.14);transform:translateY(-2px)}
+    .qitem:hover{border-color:var(--purple-d)}
+  }
+  .grid-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .stat .n{font-family:var(--serif);font-size:30px;font-weight:800}
+  .stat .l{color:var(--muted);font-size:12px}
+  .stat.coral .n{color:var(--coral-d)} .stat.soe .n{color:var(--purple-deep)} .stat.purple{background:linear-gradient(135deg,#F3ECFB,#E7DEF7)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  select,input,textarea{font-family:var(--sans);font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--purple-d);border-color:var(--purple-d)}
+  textarea{resize:vertical;width:100%}
+  .btn{border:0;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:600;background:var(--purple-deep);color:#fff;
+    transition:transform 150ms var(--ease-out), background-color 150ms ease, filter 150ms ease}
+  .btn:hover{filter:brightness(1.07)} .btn:active{transform:scale(0.97)}
+  .btn.coral{background:var(--coral)} .btn.coral:hover{background:var(--coral-d)} .btn.coral:active{transform:scale(0.97)}
+  .btn.ghost{background:#fff;color:var(--purple-deep);border:1px solid var(--purple-d)}
+  .btn.sm{padding:5px 10px;font-size:12px}
+  .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
+  .badge-soe{background:#EDE4FA;color:#6E52A6} .badge-net{background:var(--coral-soft);color:var(--coral-d)}
+  .st-open{color:#3a9d6b;font-weight:700} .st-urgent{color:var(--coral-d);font-weight:800} .st-closed{color:#a59db3}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--purple-deep);background:var(--cream2);position:sticky;top:0}
+  tr:hover td{background:#FBF7FF}
+  .link{color:var(--coral-d);text-decoration:none;font-weight:600}
+  .src-link{display:inline-block;background:var(--coral-soft);color:var(--coral-d);border:1px solid var(--coral);padding:5px 12px;border-radius:20px;font-weight:700;text-decoration:none;font-size:12px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;transition:background-color 150ms ease,color 150ms ease}
+  .src-link:hover{background:var(--coral);color:#fff}
+  .tip{background:var(--coral-soft);border:1px solid var(--coral);color:var(--coral-d);padding:10px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;font-weight:600}
+  .muted{color:var(--muted);font-size:12px}
+  .note{color:var(--muted);font-size:11px}
+  /* 今日推荐 */
+  .rec-card{background:linear-gradient(135deg,#FBEDE7,#F4ECFB);border:1px solid var(--coral-soft);border-radius:16px;padding:16px 18px;margin:6px 0 18px}
+  .rec-head{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:12px}
+  .rec-head .muted{font-size:11.5px;font-weight:400;margin-left:8px}
+  .rec-item{display:flex;justify-content:space-between;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;transition:box-shadow 220ms var(--ease-out),transform 220ms var(--ease-out),border-color 200ms ease}
+  .rec-item:last-child{margin-bottom:0}
+  .rec-main b{font-family:var(--serif);font-size:15px}
+  .rec-pos{font-size:14px;font-weight:600;color:var(--coral-d);margin-top:3px}
+  .rec-acts{display:flex;flex-direction:column;gap:6px;align-items:stretch;min-width:96px}
+  .rec-acts .btn{white-space:nowrap}
+  .pill{display:inline-block;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:700;background:var(--cream2);margin:2px 4px 2px 0}
+  .pill.on{background:var(--coral);color:#fff}
+  .pipeline{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 14px}
+  .stage{flex:1;min-width:110px;background:var(--cream2);border-radius:12px;padding:10px;text-align:center;font-size:12px;color:var(--muted)}
+  .stage b{display:block;font-size:20px;font-family:var(--serif);color:var(--ink)}
+  .stage.active{background:var(--purple);color:var(--purple-deep)}
+  .row{display:flex;gap:14px;flex-wrap:wrap}
+  .row>.col{flex:1;min-width:280px}
+  .kv{font-size:13px;margin:4px 0}
+  .kv b{color:var(--purple-deep)}
+  .modal-bg{position:fixed;inset:0;background:rgba(46,42,51,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms var(--ease-out),visibility 200ms var(--ease-out)}
+  .modal-bg.show{opacity:1;visibility:visible;pointer-events:auto}
+  .modal{background:#fff;border-radius:16px;padding:22px;max-width:560px;width:100%;max-height:86vh;overflow:auto;
+    transform:scale(0.96);opacity:0;transition:transform 220ms var(--ease-out),opacity 220ms var(--ease-out)}
+  .modal-bg.show .modal{transform:scale(1);opacity:1}
+  .modal h3{margin-top:0}
+  .field{margin:8px 0}
+  .field label{display:block;font-size:12px;color:var(--purple-deep);font-weight:700;margin-bottom:3px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,12px);background:var(--purple-deep);color:#fff;padding:10px 18px;border-radius:24px;font-size:13px;opacity:0;transition:opacity 220ms var(--ease-out),transform 220ms var(--ease-out);z-index:80;pointer-events:none}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .empty{color:var(--muted);text-align:center;padding:30px;font-size:14px}
+  .qitem{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff;transition:border-color 200ms ease}
+  .qitem .q{font-weight:700;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+  .qitem .a{margin-top:8px}
+  pre.code{background:#2E2A33;color:#F3EEE5;border-radius:12px;padding:14px;white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.55;max-height:320px;overflow:auto}
+  @media(max-width:860px){
+    .app{grid-template-columns:1fr} 
+    .side{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px}
+    .brand{width:100%} .nav-btn{flex:1 1 auto;justify-content:center;padding:8px 10px;font-size:12.5px}
+    .side .foot{display:none}
+    .main{padding:18px 16px 50px}
+    .grid-stats{grid-template-columns:repeat(2,1fr)}
+  }
+  /* 键盘焦点可见性（a11y） */
+  :focus-visible{outline:2px solid var(--coral-d);outline-offset:2px;border-radius:8px}
+  /* 减少动态：保留透明度/颜色过渡，去掉位移与缩放手势 */
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-property:opacity!important}
+    .page.show{animation:none}
+    .btn:active,.nav-btn:active{transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">秋招工作台<small>2027届</small></div>
+    <button class="nav-btn active" data-page="pool"><span class="ic">🗂️</span>信息池看板</button>
+    <button class="nav-btn" data-page="jobs"><span class="ic">📋</span>岗位管理</button>
+    <button class="nav-btn" data-page="interview"><span class="ic">🎤</span>面试进度</button>
+    <div class="foot">数据本地存储于浏览器<br>看板与 JSON 同目录自动刷新</div>
+  </aside>
+
+  <main class="main">
+    <!-- 信息池看板 -->
+    <section class="page show" id="page-pool">
+      <h1 class="page-title">信息池看板</h1>
+      <p class="page-sub">每日 8:00 自动搜集更新 · 仅 2027 届 · 已排除社招 · 来源：国资委 / 中国公共招聘网 / 国聘网 / 各集团与大厂官网</p>
+      <div class="rec-card" id="dailyRec"></div>
+      <div class="grid-stats" id="poolStats"></div>
+      <div class="toolbar">
+        <select id="fCat"><option value="">全部类别</option><option value="央国企">央国企</option><option value="互联网大厂">互联网大厂</option></select>
+        <select id="fStatus"><option value="">全部状态</option><option value="open">报名中</option><option value="urgent">即将截止</option><option value="closed">已截止</option></select>
+        <input id="fSearch" placeholder="搜索单位 / 岗位 / 关键词" style="flex:1;min-width:180px">
+        <button class="btn ghost" id="btnRefresh">↻ 刷新数据</button>
+      </div>
+      <div class="card" style="padding:0;overflow:auto">
+        <table id="poolTable"><thead><tr>
+          <th>单位</th><th>岗位 / 项目</th><th>类别</th><th>批次</th><th>截止</th><th>状态</th><th>来源 / 发布</th><th>操作</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <!-- 岗位管理 -->
+    <section class="page" id="page-jobs">
+      <h1 class="page-title">岗位管理</h1>
+      <p class="page-sub">自动抓取（信息池一键录入）+ 手动补充 · 全链路追踪</p>
+      <div class="pipeline" id="pipeline"></div>
+      <div class="toolbar">
+        <button class="btn coral" id="btnAddJob">+ 手动新增岗位</button>
+        <button class="btn ghost" id="btnCopyJobs" title="把当前列表所有行复制为 Markdown 表格，可直接粘贴给 AI 或记录文档">📋 复制全部行</button>
+        <select id="jfStatus"><option value="">按状态筛选</option><option>未投递</option><option>已投递</option><option>笔试中</option><option>面试中</option><option>offer</option><option>已拒绝</option></select>
+        <input id="jfSearch" placeholder="搜索单位 / 岗位" style="flex:1;min-width:160px">
+      </div>
+      <div class="card" style="padding:0;overflow:auto">
+        <table id="jobsTable"><thead><tr>
+          <th>单位</th><th>岗位</th><th>类别</th><th>截止</th><th>状态</th><th>备注</th><th>操作</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <!-- 简历定制模块已移除；面试准备也移至 WorkBuddy，提示见「面试进度」顶部 -->
+
+    <!-- 面试进度 -->
+    <section class="page" id="page-interview">
+      <h1 class="page-title">面试进度</h1>
+      <p class="page-sub">统一记录每场面试的问题与复盘</p>
+      <div class="tip">💡 面试准备交给 WorkBuddy：把新收到的 JD 发给他，他会结合记忆里你的简历，直接产出专属面试准备 / 模拟电话排练指令。简历定制也随时可在 WorkBuddy 里做。</div>
+      <div class="toolbar"><button class="btn coral" id="btnAddInterview">+ 记录一场面试</button></div>
+      <div id="interviewList"></div>
+    </section>
+
+    <!-- 面试准备模块已移除：提示见「面试进度」顶部 -->
+
+    <!-- 独立看板模块已移除 -->
+  </main>
+</div>
+
+<!-- 通用弹窗 -->
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalBox"></div></div>
+<div class="toast" id="toast"></div>
+
+<!-- 信息池数据（同目录，定时任务更新后刷新） -->
+<script src="recruit-seed.js"></script>
+<script>
+/* ============ 内嵌信息池数据（单文件自包含：无 recruit-seed.js 也可直接用） ============ */
+window.__RECRUIT_DATA__ = {"meta":{"title":"2027届秋招信息池","updatedAt":"2026-09-14","owner":"刘峻豪","scope":"仅面向2027届毕业生，已排除社会招聘","sources":["国务院国资委人事招聘专栏 http://www.sasac.gov.cn","中国公共招聘网 http://job.mohrss.gov.cn","国聘网 https://www.iguopin.com","国家大学生就业服务平台(24365) https://www.ncss.cn","各集团招聘官网 / 大厂校招官网"],"note":"deadline 为空表示官方公告未公布截止时间（招满即止或待公告），未做编造；带“预测”字样为往年节奏推测，以官网为准。数据更新于2026-09-14；已按用户专业（土地资源管理/公共管理）补充适配岗位。"},"records":[{"id":"bytedance-2027","org":"字节跳动","position":"研发 / 产品 / 运营 / 设计 / 市场 / 职能支持 / 销售 / 游戏策划（含AI全栈工程师、AI Agent开发）","category":"互联网大厂","batch":"正式批","deadline":"2027-05-31","deadlineNote":"全年滚动招聘，岗位招满即下架（网申开放至2027-05-31）","source":"字节跳动招聘官网 jobs.bytedance.com","publishedAt":"2026-08-03","url":"https://jobs.bytedance.com/campus","target":"2027届（2026.9-2027.8毕业）"},{"id":"tencent-2027","org":"腾讯","position":"技术类 / 产品类 / 设计类 / 市场类 / 职能类（含青云计划、AI全栈工程师、AIGC艺术创作）","category":"互联网大厂","batch":"正式批","deadline":"","deadlineNote":"招满即止；官方建议8-10月集中面试与录用，尽早投递","source":"腾讯招聘官网 join.qq.com","publishedAt":"2026-08-11","url":"https://join.qq.com","target":"2027届（2026.1-2027.12毕业）"},{"id":"alibaba-2027","org":"阿里巴巴","position":"算法 / 研发 / 芯片 / 产品 / 游戏 / 运营 / 商务拓展（淘天集团、阿里云、阿里星顶尖人才计划）","category":"互联网大厂","batch":"正式批","deadline":"2026-11-30","deadlineNote":"淘天集团截止11月30日，集团整体招满即止","source":"阿里巴巴校园招聘官网 talent.alibaba.com","publishedAt":"2026-08-05","url":"https://talent.alibaba.com","target":"2027届（2026.11.1-2027.10.31毕业）"},{"id":"jd-2027","org":"京东","position":"采销 / 物流 / 技术 / 产品 / 运营 / 设计","category":"互联网大厂","batch":"正式批","deadline":"2026-11-30","deadlineNote":"网申8.3-11.30，建议尽早投递","source":"京东校招官网 campus.jd.com","publishedAt":"2026-08-03","url":"https://campus.jd.com","target":"2027届本科、硕博"},{"id":"huawei-2027","org":"华为","position":"研发 / 销售 / 财经 / 供应链 / 法务等（含2012实验室、顶尖AI人才计划）","category":"互联网大厂","batch":"正式批","deadline":"","deadlineNote":"8月15日启动，官网无统一截止日，招满即止（第三方流传的截止日期互相矛盾，勿信）","source":"华为招聘官网 career.huawei.com","publishedAt":"2026-08-15","url":"https://career.huawei.com/cn/campus-recruitment","target":"2027届国内本硕，博士/海外放宽至2026.1后毕业"},{"id":"meituan-2027","org":"美团","position":"技术 / 产品 / 商业分析 / 运营 / 零售 / 销售等10大类100余种岗位（含AI全栈工程师、AI产品Builder）","category":"互联网大厂","batch":"正式批","deadline":"2026-10-31","deadlineNote":"网申8.17-10.31，部分岗位招满提前结束；北斗计划全年招聘","source":"美团招聘官网 join.meituan.com","publishedAt":"2026-08-17","url":"https://join.meituan.com/web/campus/schedule","target":"2027届（2026.11-2027.10毕业）"},{"id":"baidu-2027","org":"百度","position":"后端 / 前端 / 客户端 / 算法 / 产品 / 运营 / 设计 / 市场 / 财务 / 法务等","category":"互联网大厂","batch":"提前批+正式批","deadline":"2027-06-01","deadlineNote":"网申及内推7.9起-次年6月，通道全年开放，越早投递Offer概率越高","source":"百度校招官网 talent.baidu.com","publishedAt":"2026-07-09","url":"https://talent.baidu.com","target":"2027届"},{"id":"pdd-2027","org":"拼多多","position":"研发 / 产品 / 市场 / 运营 / 视觉 / 语言 / 综合等7大职类（3000+ Offer，含商品运营管培生）","category":"互联网大厂","batch":"正式批","deadline":"2027-01-31","deadlineNote":"正式批9.2启动，网申9.2-次年1.31；提前批8.23已截止","source":"拼多多集团招聘官网 careers.pddglobalhr.com","publishedAt":"2026-09-02","url":"https://careers.pddglobalhr.com","target":"2027届（2026.9-2027.8毕业）"},{"id":"netease-games-2027","org":"网易游戏（互娱）","position":"策划 / 技术 / 美术 / 测试 / 用户体验 / 市场 / 运营 / PM","category":"互联网大厂","batch":"正式批","deadline":"","deadlineNote":"7月21日起网申通道开放，招满即止，越早投递越快锁定OFFER","source":"网易游戏校园招聘 campus.game.163.com","publishedAt":"2026-07-21","url":"https://campus.game.163.com","target":"2027届（2026.9-2027.8毕业）"},{"id":"honor-2027","org":"荣耀","position":"多方向（全球校招）","category":"互联网大厂","batch":"正式批","deadline":"2026-09-30","deadlineNote":"","source":"荣耀校招官网 honor.com/cn/career","publishedAt":"2026-08-12","url":"https://www.honor.com/cn/career/","target":"2027届"},{"id":"chinatelecom-2027","org":"中国电信","position":"市场 / 销售与服务 / 产品 / 企业信息化 / 网发建设 / 网络维护 / 研发 / 产数 / 综合支撑（含优才计划）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"8月底启动网申，持续至11月，各省分公司截止不同，招满即止（以分公司公告为准）","source":"中国电信招贤纳士专栏 chinatelecom.com.cn/zp","publishedAt":"2026-08-24","url":"http://www.chinatelecom.com.cn/zp/","target":"2027届（2026届未就业亦可）"},{"id":"sgcc-2027","org":"国家电网","position":"2027第一批（电工类为主，覆盖市局县局；含电子信息/财会/管理类）","category":"央国企","batch":"一批（未发布）","deadline":"","deadlineNote":"提前批预计2026年9月发布（面向硕博）；一批预计11月中旬公告、12月上旬笔试（预测，以官网为准）","source":"国家电网人力资源招聘平台 zhaopin.sgcc.com.cn","publishedAt":"","url":"https://zhaopin.sgcc.com.cn","target":"2027届（电工类专科及以上，其他本科及以上）"},{"id":"icbc-2027","org":"中国工商银行","position":"2027年度校园招聘（总行及境内分行，管培 / 科技菁英 / 客户经理等）","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"网上报名9.4-10.8，笔试预计10月下旬","source":"中国公共招聘网 job.mohrss.gov.cn / 工行官网 job.icbc.com.cn","publishedAt":"2026-09-04","url":"https://job.icbc.com.cn","target":"2027届（2026届未就业亦可）"},{"id":"boc-2027","org":"中国银行","position":"2027全球校园招聘（总行、直属机构及境内分行；每人最多申请5个岗位）","category":"央国企","batch":"正式批","deadline":"2026-10-09","deadlineNote":"报名9.3-10.9 24:00，10月中下旬笔试","source":"中国银行人才招聘 campus.chinahr.com/pages/2027-boc","publishedAt":"2026-09-03","url":"https://campus.chinahr.com/pages/2027-boc","target":"2027届"},{"id":"abchina-2027","org":"中国农业银行","position":"2027年度校园招聘（总行及境内分行，含科技类专项人才、客户经理等）","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"报名即日起-10.8 24:00，笔试初定10月下旬或11月上旬","source":"中国公共招聘网 job.mohrss.gov.cn / 农行招聘 career.abchina.com.cn","publishedAt":"2026-09-04","url":"https://career.abchina.com.cn","target":"2027届（2026届未就业亦可）"},{"id":"cnpc-2027","org":"中国石油","position":"2027年高校毕业生招聘（各招聘单位；每人最多应聘2家单位）","category":"央国企","batch":"正式批","deadline":"2026-10-15","deadlineNote":"报名9.9-10.15，仅通过招聘平台报名","source":"中国石油高校毕业生招聘平台 zhaopin.cnpc.com.cn","publishedAt":"2026-09-09","url":"https://zhaopin.cnpc.com.cn","target":"2027届"},{"id":"gz-transport-plan-2027","org":"广州市交通规划研究院","position":"国土空间与地理科学类（城乡规划 / 土地资源管理 / 人文地理 / GIS / 遥感等）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届硕士及以上；含交通运输类、国土空间与地理科学类、计算机与数学类多个方向，实习考察两周","source":"2027秋招公告（via 超级简历）","publishedAt":"2026-08-14","url":"https://www.chaojijianli.com/xiaozhao/guangzhou-transport-planning-institute-2027-autumn-12482-9c6a74/","target":"2027届硕士及以上"},{"id":"htgh-2027","org":"航天规划设计集团","position":"2027届规划设计岗（城乡规划与管理类，北京大兴，招2人）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"国聘网在招，招满即止；另有电气智能化设计、测绘等岗位","source":"国聘网 iguopin.com","publishedAt":"2026-09-02","url":"https://www.iguopin.com/company?id=10685386929595437","target":"2027届硕士"},{"id":"zz-plan-2027","org":"郑州市规划勘测设计研究院","position":"城乡规划 / 测绘 / 市政工程等（地方国企，郑州市自然资源和规划局主管）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届秋招宣讲会已启动，招满即止（以官网公告为准）","source":"应届生求职网宣讲会","publishedAt":"2026-08-12","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6034389","target":"2027届"},{"id":"mnr-2027","org":"自然资源部所属事业单位","position":"土地资源管理 / 国土空间规划 / 测绘 / 地质 / 海洋等方向（直属事业单位公开招聘）","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"2026年度分4批发布（1-7月），2027年度预计2026年10月起陆续发布（预测，以人社部/自然资源部公告为准）","source":"自然资源部所属企事业单位公开招聘报名平台 sydwgkzp.cn/mnr","publishedAt":"","url":"https://www.sydwgkzp.cn/mnr/index.html","target":"2027届（含两年择业期未就业毕业生）"},{"id":"sd-dnr-2027","org":"山东省自然资源厅所属事业单位","position":"国土空间规划 / 土地资源管理 / 测绘 / 地质调查等方向（山东省国土测绘院、地质调查院等）","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"往年3月发布（2026年报名3.4-3.11），2027年度预计2027年3月发布（预测，以公告为准）","source":"山东省自然资源厅 dnr.shandong.gov.cn","publishedAt":"","url":"http://dnr.shandong.gov.cn/","target":"2027届硕士优先"}],"generatedAt":"2026-09-14T10:48:19.689Z"};
+/* 说明：上方为内嵌数据快照；如需每日更新，请将最新 recruit-seed.js 放同目录后点「刷新数据」，将自动覆盖。 */
+
+/* ============ 基础工具 ============ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } },
+  set(k, v){ localStorage.setItem(k, JSON.stringify(v)); }
+};
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function todayMid(){ const t=new Date(); return new Date(t.getFullYear(),t.getMonth(),t.getDate()); }
+function statusOf(rec){
+  const base=todayMid();
+  const dl=rec.deadline?new Date(rec.deadline+'T00:00:00'):null;
+  if(dl){ const diff=Math.round((dl-base)/86400000);
+    if(diff<0) return {key:'closed',label:'已截止',diff};
+    if(diff<=14) return {key:'urgent',label:'即将截止',diff};
+    return {key:'open',label:'报名中',diff};
+  }
+  return {key:'open',label:'报名中(待公布)',diff:null};
+}
+function fmtDate(d){ return d?d:''; }
+
+/* ============ 默认画像/数据（基于已知简历预填） ============ */
+const DEFAULT_PROFILE = {
+  name:'（你的姓名）',
+  email:'（你的邮箱）',
+  phone:'（你的电话）',
+  wechat:'（你的微信）',
+  portfolio:'（你的作品集/论文链接）',
+  school:'山东农业大学 · 公共管理学（土地资源管理方向）硕士 2027 届',
+  strengths:[
+    '土地资源管理专业硕士：系统掌握土地资源调查与评价、国土空间规划、土地制度与政策、不动产登记等专业知识，专业与自然资源系统岗位高度对口',
+    '公共管理学科训练：熟悉公共政策分析、公共部门管理、行政管理框架，能胜任事业单位/政府部门/国企的综合管理、政策研究类岗位',
+    '数据与工具能力：具备 GIS/遥感（土地资源方向常用）、SPSS/Stata 等统计分析能力，可处理空间数据与政策数据的实证分析',
+    '科研与写作能力：硕士期间参与科研课题与论文写作（可补充具体情况），能独立完成研究报告、政策解读、公文材料',
+    '（示例）加分项：发表论文 / 参与课题 / 实习经历 / 荣誉奖项，挑与目标岗位相关的写'
+  ],
+  weaknesses:[
+    '（示例）正式实习经历较少 → 用科研课题与调研实践补位，突出专业对口与研究方法',
+    '（示例）某工具或方向不熟悉（如大数据编程）→ 说明已在补齐，给出具体学习路径',
+    '（示例）实践经验有限 → 强调在校期间完成的课题项目与实际产出'
+  ],
+  prep:[
+    '准备 1 分钟 / 3 分钟两版自我介绍（突出土地资源管理专业对口 + 硕士科研能力）',
+    '整理论文 / 课题 / 调研报告等成果，准备 1-2 个可深度展开的项目',
+    '演练 STAR 行为题：课题研究、团队协作、数据处理的案例各准备一个',
+    '补行业认知：自然资源部及山东省自然资源系统动态、国土空间规划改革、土地管理制度最新政策',
+    '准备 3 个高质量反问（岗位具体业务 / 培养路径 / 单位研究方向）',
+    '模拟面试前测试设备与网络（视频面试）'
+  ]
+};
+const DEFAULT_QA = [
+  {q:'请做一分钟自我介绍',a:'（示例）我是山东农业大学公共管理学硕士，研究方向为土地资源管理。专业上系统学习过国土空间规划、土地制度与政策、土地资源评价等课程，硕士期间（课题/论文成果）。希望加入贵单位，是因为（结合单位业务亮点的一句话）。'},
+  {q:'为什么选择这个岗位 / 方向？',a:'（示例）结合自身土地资源管理专业背景与课题经历，说明对自然资源管理/规划方向的长期兴趣，并提到该单位在该方向的代表业务。'},
+  {q:'你最大的优势是什么？',a:'（示例）专业对口+科研能力：土地资源管理方向的系统训练，加上硕士课题的实证研究经验（量化证据），能直接适配岗位需求。'},
+  {q:'你的劣势 / 不足是什么？',a:'（示例）坦诚一个真实但可弥补的不足（如正式实习较少），并说明用科研项目与调研实践补位，给出具体改进路径。'},
+  {q:'介绍你最满意的项目 / 课题',a:'（示例）用 STAR 讲一个课题：研究背景→你的角色与研究方法→可量化结论→实践价值。挑与你目标岗位最相关的。'},
+  {q:'你对国土空间规划/土地管理政策的理解？',a:'（示例）结合最新政策（如国土空间规划体系改革、耕地保护、土地要素市场化配置）谈自己的理解，展示专业视野。'},
+  {q:'如何看待基层/事业单位工作节奏？',a:'（示例）表达对公共部门工作节奏的认同，强调服务意识、规范意识与持续学习。'},
+  {q:'你的职业规划？',a:'（示例）1-2年深耕专业岗位打牢业务基本功，3年成长为能独立承担研究/管理任务的骨干，长期向（方向）发展。'},
+  {q:'你期望的薪资 / 待遇？',a:'（示例）参考事业单位/国企行情表达区间，强调更看重平台与成长空间。'},
+  {q:'你有什么想问我们的？',a:'（示例）问岗位具体业务方向、单位承担的重点项目、新人培养机制等 2-3 个高质量问题。'}
+];
+
+/* ============ 状态 ============ */
+let PROFILE = LS.get('qz_profile', DEFAULT_PROFILE);
+let POSITIONS = LS.get('qz_positions', []);
+let INTERVIEWS = LS.get('qz_interviews', []);
+let QA = LS.get('qz_qa', DEFAULT_QA);
+let RECRUIT = window.__RECRUIT_DATA__ || {meta:{updatedAt:'(未加载)'},records:[]};
+
+function dataOk(){ return window.__RECRUIT_DATA__ && window.__RECRUIT_DATA__.records && window.__RECRUIT_DATA__.records.length; }
+
+/* ============ 导航 ============ */
+$$('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
+  $$('.nav-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  $$('.page').forEach(p=>p.classList.remove('show'));
+  $('#page-'+b.dataset.page).classList.add('show');
+  if(b.dataset.page==='pool') renderPool();
+  if(b.dataset.page==='jobs') renderJobs();
+  if(b.dataset.page==='interview') renderInterviews();
+}));
+
+/* ============ 信息池看板 ============ */
+// 复制文本（优先 clipboard API，失败回退 execCommand）
+function copyText(t,label){
+  const done=()=>toast('已复制：'+(label||t));
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done).catch(()=>fallbackCopy(t,done));
+  } else fallbackCopy(t,done);
+}
+function fallbackCopy(t,done){
+  const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; ta.style.top='0'; document.body.appendChild(ta); ta.focus(); ta.select();
+  try{ document.execCommand('copy'); done&&done(); }catch(e){ toast('复制失败，请手动复制'); }
+  document.body.removeChild(ta);
+}
+// JD / 公告链接：优先取用户右键修正后的覆盖值，否则用 seed 里的原始值
+function effUrl(r){
+  const ov=LS.get('qz_url_ovr',{});
+  const o=ov[r.id];
+  return (o && o.url) ? o.url : (r.url||'');
+}
+// 右键编辑岗位的 JD / 公告链接（存 localStorage，可随时改回）
+function editUrl(id){
+  const r=RECRUIT.records.find(x=>x.id===id); if(!r) return;
+  const ov=LS.get('qz_url_ovr',{});
+  const hasOvr=!!(ov[r.id]&&ov[r.id].url);
+  const cur=hasOvr?ov[r.id].url:(r.url||'');
+  openModal(`<h3>编辑 JD / 公告链接</h3>
+    <div class="field"><label>单位 / 岗位</label><div class="muted">${esc(r.org)} · ${esc(r.position)}</div></div>
+    <div class="field"><label>原始链接${hasOvr?'（已覆盖）':''}</label><div class="muted" style="word-break:break-all">${esc(r.url||'（无）')}</div></div>
+    <div class="field"><label>新链接（清空则恢复默认）</label><input id="u_url" value="${esc(cur)}" placeholder="https://..."></div>
+    <div style="text-align:right;margin-top:10px"><button class="btn ghost" onclick="closeModal()">取消</button> <button class="btn coral" id="u_save">保存</button></div>`);
+  $('#u_save').addEventListener('click',()=>{
+    const v=$('#u_url').value.trim();
+    const ov2=LS.get('qz_url_ovr',{});
+    if(v) ov2[r.id]={url:v}; else delete ov2[r.id];
+    LS.set('qz_url_ovr',ov2);
+    closeModal(); renderPool();
+    toast(v?'JD 链接已更新':'已恢复默认链接');
+  });
+}
+// 按天确定性取 3 个报名中岗位（同日稳定、跨天变化）
+function renderDailyRec(){
+  const recs=RECRUIT.records||[];
+  const key=todayKey();
+  const open=recs.filter(r=>statusOf(r).key!=='closed');
+  const box=$('#dailyRec');
+  if(!open.length){ box.innerHTML='<div class="rec-head">🔥 今日推荐 <span class="muted">'+key+'</span></div><div class="muted">暂无报名中的岗位，点「↻ 刷新数据」或等待每日 8:00 更新。</div>'; return; }
+  const arr=[...open]; let seed=daySeed();
+  const rnd=()=>{ seed=(seed*1103515245+12345)>>>0; return seed/4294967296; };
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); const t=arr[i]; arr[i]=arr[j]; arr[j]=t; }
+  const picks=arr.slice(0,3);
+  box.innerHTML='<div class="rec-head" style="display:flex;align-items:center;gap:8px">🔥 今日推荐 <span class="muted">'+key+' · 每天 8:00 自动更新 · 点「复制名称」去招聘官网搜 JD</span><button class="btn sm ghost" data-refresh-rec style="margin-left:auto">↻ 换一批</button></div>'+
+    picks.map(r=>{
+      const badge=r.category==='央国企'?'badge-soe':'badge-net';
+      const inJobs=POSITIONS.some(p=>p.srcId===r.id);
+      return `<div class="rec-item">
+        <div class="rec-main"><b>${esc(r.org)}</b> <span class="badge ${badge}">${esc(r.category)}</span>
+          <div class="rec-pos">${esc(r.position)}</div>
+          <div class="note">${r.deadline?('截止 '+esc(r.deadline)):(r.deadlineNote||'截止待公布')}</div></div>
+        <div class="rec-acts">
+          <button class="btn sm" data-copy="${esc(r.org+' '+r.position)}">📋 复制名称</button>
+          ${r.url?`<a class="btn sm ghost" href="${esc(effUrl(r))}" target="_blank" title="左键打开 · 右键编辑链接" data-jd="${esc(r.id)}">查看 JD ↗</a>`:''}
+          ${inJobs?'<span class="muted">已录入</span>':`<button class="btn sm coral" data-enter="${r.id}">录入</button>`}
+        </div></div>`;
+    }).join('');
+  $$('#dailyRec [data-copy]').forEach(b=>b.addEventListener('click',()=>copyText(b.dataset.copy)));
+  $$('#dailyRec [data-enter]').forEach(b=>b.addEventListener('click',()=>enterJob(b.dataset.enter)));
+  $$('#dailyRec [data-refresh-rec]').forEach(b=>b.addEventListener('click',refreshDailyRec));
+  $$('#dailyRec [data-jd]').forEach(a=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
+}
+// 今日推荐的确定性种子：同一天稳定、刷新换一批、跨天自动重置
+function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function daySeed(){
+  const key=todayKey();
+  const s=LS.get('qz_rec_seed',null);
+  if(s&&s.date===key) return s.seed;
+  let h=0; for(let i=0;i<key.length;i++) h=(h*31+key.charCodeAt(i))>>>0;
+  LS.set('qz_rec_seed',{date:key,seed:h});
+  return h;
+}
+function refreshDailyRec(){
+  const key=todayKey();
+  LS.set('qz_rec_seed',{date:key,seed:Math.floor(Math.random()*1e9)});
+  renderDailyRec();
+  toast('已换一批今日推荐');
+}
+function renderPool(){
+  if(!dataOk()){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">未找到 recruit-seed.js，请将本文件与 recruit-seed.js / recruit-data.json 放在同一目录。</td></tr>'; $('#poolStats').innerHTML=''; return; }
+  const recs=RECRUIT.records;
+  let total=recs.length,open=0,urgent=0,closed=0;
+  recs.forEach(r=>{const s=statusOf(r); if(s.key==='closed')closed++; else{open++; if(s.key==='urgent')urgent++;}});
+  $('#poolStats').innerHTML=`
+    <div class="card stat"><div class="n">${total}</div><div class="l">招聘总数</div></div>
+    <div class="card stat soe"><div class="n">${open}</div><div class="l">报名中（未截止）</div></div>
+    <div class="card stat coral"><div class="n">${urgent}</div><div class="l">14 天内截止</div></div>
+    <div class="card stat purple"><div class="n">${closed}</div><div class="l">已截止</div></div>`;
+  const cat=$('#fCat').value, st=$('#fStatus').value, kw=$('#fSearch').value.trim().toLowerCase();
+  const list=recs.filter(r=>{
+    const s=statusOf(r);
+    if(cat && r.category!==cat) return false;
+    if(st && s.key!==st) return false;
+    if(kw && !(r.org+r.position+r.source+(r.deadlineNote||'')).toLowerCase().includes(kw)) return false;
+    return true;
+  }).sort((a,b)=>{ const da=a.deadline||'9999-12-31', db=b.deadline||'9999-12-31'; return da<db?-1:da>db?1:0; });
+  if(!list.length){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">无匹配记录</td></tr>'; return; }
+  $('#poolTable tbody').innerHTML=list.map(r=>{
+    const s=statusOf(r); const badge=r.category==='央国企'?'badge-soe':'badge-net';
+    const stcls=s.key==='closed'?'st-closed':s.key==='urgent'?'st-urgent':'st-open';
+    const inJobs=POSITIONS.some(p=>p.srcId===r.id);
+    return `<tr>
+      <td><b>${esc(r.org)}</b></td>
+      <td>${esc(r.position)}</td>
+      <td><span class="badge ${badge}">${esc(r.category)}</span></td>
+      <td>${esc(r.batch)}</td>
+      <td class="${stcls}">${r.deadline?esc(r.deadline):'<span class="muted">待公布</span>'}${r.deadlineNote?`<br><span class="note">${esc(r.deadlineNote)}</span>`:''}</td>
+      <td class="${stcls}">${esc(s.label)}</td>
+      <td>${r.url?`<a class="src-link" href="${esc(effUrl(r))}" target="_blank" title="${esc(r.source)}">📑 ${esc(r.source)}</a>`:`<span class="muted">${esc(r.source)}</span>`}<div class="note">${r.publishedAt?'发布 '+esc(r.publishedAt):'发布待定'}</div></td>
+      <td>${inJobs?'<span class="muted">已录入</span>':`<button class="btn sm coral" data-enter="${r.id}">录入岗位</button>`}
+        <button class="btn sm" data-copy="${esc(r.org+' '+r.position)}">📋 复制名称</button>
+        ${r.url?`<a class="btn sm ghost" href="${esc(effUrl(r))}" target="_blank" title="左键打开 · 右键编辑链接" data-jd="${esc(r.id)}">查看 JD ↗</a>`:''}</td>
+    </tr>`;
+  }).join('');
+  $$('#poolTable [data-enter]').forEach(b=>b.addEventListener('click',()=>enterJob(b.dataset.enter)));
+  $$('#poolTable [data-copy]').forEach(b=>b.addEventListener('click',()=>copyText(b.dataset.copy)));
+  $$('#poolTable [data-jd]').forEach(a=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
+  renderDailyRec();
+}
+function enterJob(id){
+  const r=RECRUIT.records.find(x=>x.id===id); if(!r) return;
+  if(POSITIONS.some(p=>p.srcId===id)){ toast('该岗位已在岗位管理中'); return; }
+  POSITIONS.unshift({id:uid(),srcId:id,org:r.org,position:r.position,category:r.category,batch:r.batch,deadline:r.deadline||'',source:r.source,url:effUrl(r),status:'未投递',note:r.deadlineNote||''});
+  LS.set('qz_positions',POSITIONS); toast('已录入：'+r.org); renderJobs();
+}
+$('#fCat').addEventListener('change',renderPool);
+$('#fStatus').addEventListener('change',renderPool);
+$('#fSearch').addEventListener('input',renderPool);
+$('#btnRefresh').addEventListener('click',()=>{
+  const s=document.createElement('script'); s.src='recruit-seed.js?v='+Date.now(); s.onload=()=>{ RECRUIT=window.__RECRUIT_DATA__; renderPool(); toast('信息池已刷新'); }; s.onerror=()=>toast('未找到外部 recruit-seed.js，继续使用内嵌数据'); document.body.appendChild(s);
+});
+
+/* ============ 岗位管理 ============ */
+const STATUSES=['未投递','已投递','笔试中','面试中','offer','已拒绝'];
+function renderPipeline(){
+  const counts={}; STATUSES.forEach(s=>counts[s]=0); POSITIONS.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
+  const map={'未投递':'待投递','已投递':'已投','笔试中':'笔试','面试中':'面试','offer':'Offer','已拒绝':'已拒'};
+  $('#pipeline').innerHTML=STATUSES.map(s=>`<div class="stage"><b>${counts[s]}</b>${map[s]}</div>`).join('');
+}
+function currentJobList(){
+  const f=$('#jfStatus').value, kw=$('#jfSearch').value.trim().toLowerCase();
+  return POSITIONS.filter(p=>(!f||p.status===f)&&(!kw||(p.org+p.position).toLowerCase().includes(kw)));
+}
+function renderJobs(){
+  renderPipeline();
+  const list=currentJobList();
+  if(!list.length){ $('#jobsTable tbody').innerHTML='<tr><td colspan="7" class="empty">暂无岗位，去「信息池看板」一键录入或手动新增</td></tr>'; return; }
+  $('#jobsTable tbody').innerHTML=list.map(p=>{
+    const stcls=p.status==='已拒绝'?'st-closed':p.status==='offer'?'st-urgent':'st-open';
+    const sel=STATUSES.map(s=>`<option ${s===p.status?'selected':''}>${s}</option>`).join('');
+    return `<tr>
+      <td><b>${esc(p.org)}</b></td>
+      <td>${esc(p.position)}</td>
+      <td><span class="badge ${p.category==='央国企'?'badge-soe':'badge-net'}">${esc(p.category||'')}</span></td>
+      <td class="${stcls}">${p.deadline?esc(p.deadline):'<span class="muted">待公布</span>'}</td>
+      <td><select data-st="${p.id}">${sel}</select></td>
+      <td class="muted">${esc(p.note||'')}</td>
+      <td><button class="btn sm ghost" data-note="${p.id}">备注</button> <button class="btn sm" data-del="${p.id}" style="background:#F3D9D3;color:#B23A26">删除</button></td>
+    </tr>`;
+  }).join('');
+  $$('#jobsTable [data-st]').forEach(s=>s.addEventListener('change',()=>{ const p=POSITIONS.find(x=>x.id===s.dataset.st); p.status=s.value; LS.set('qz_positions',POSITIONS); renderPipeline(); const added=ensureInterviewFor(p); if(added){ LS.set('qz_interviews',INTERVIEWS); renderInterviews(); toast('状态→'+p.status+' · 已自动建「一面」'); } else { toast('状态→'+p.status); } }));
+  $$('#jobsTable [data-note]').forEach(b=>b.addEventListener('click',()=>{ const p=POSITIONS.find(x=>x.id===b.dataset.note); const v=prompt('备注（进度/HR/渠道等）：',p.note||''); if(v!==null){ p.note=v; LS.set('qz_positions',POSITIONS); renderJobs(); } }));
+  $$('#jobsTable [data-del]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('确认删除该岗位记录？')){ POSITIONS=POSITIONS.filter(x=>x.id!==b.dataset.del); LS.set('qz_positions',POSITIONS); renderJobs(); } }));
+}
+$('#jfStatus').addEventListener('change',renderJobs);
+$('#jfSearch').addEventListener('input',renderJobs);
+$('#btnCopyJobs').addEventListener('click',()=>{
+  const list=currentJobList();
+  if(!list.length){ toast(POSITIONS.length?'当前筛选下没有岗位':'岗位管理还没有记录，先去信息池录入'); return; }
+  const head=['单位','岗位/项目','类别','批次','报名截止','状态','备注','来源','公告链接'];
+  const cell=v=>String(v==null||v===''?'—':v).replace(/\|/g,'／').replace(/\r?\n/g,' ');
+  const lines=['| '+head.join(' | ')+' |','|'+head.map(()=>' --- ').join('|')+'|'];
+  list.forEach(p=>lines.push('| '+[p.org,p.position,p.category,p.batch,p.deadline||'待公布',p.status,p.note,p.source,p.url].map(cell).join(' | ')+' |'));
+  const counts={}; list.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
+  const sum=STATUSES.filter(s=>counts[s]).map(s=>s+' '+counts[s]).join(' · ');
+  const out='岗位管理 · 共 '+list.length+' 条（'+sum+'）｜导出于 '+new Date().toISOString().slice(0,10)+'\n\n'+lines.join('\n');
+  copyText(out, list.length+' 条岗位行（Markdown 表格）');
+});
+$('#btnAddJob').addEventListener('click',()=>{
+  openModal(`<h3>手动新增岗位</h3>
+    <div class="field"><label>单位名称</label><input id="m_org" placeholder="如：影视飓风"></div>
+    <div class="field"><label>岗位 / 项目</label><input id="m_pos" placeholder="如：视频制片实习生"></div>
+    <div class="field"><label>类别</label><select id="m_cat"><option>互联网大厂</option><option>央国企</option><option>其他</option></select></div>
+    <div class="field"><label>批次</label><input id="m_batch" placeholder="如：正式批"></div>
+    <div class="field"><label>报名截止（留空=待公布）</label><input id="m_dl" type="date"></div>
+    <div class="field"><label>来源 / 公告链接</label><input id="m_src" placeholder="官网或备注"></div>
+    <div style="text-align:right;margin-top:10px"><button class="btn ghost" onclick="closeModal()">取消</button> <button class="btn coral" id="m_save">保存</button></div>`);
+  $('#m_save').addEventListener('click',()=>{
+    const org=$('#m_org').value.trim(); if(!org){ toast('请填写单位名称'); return; }
+    POSITIONS.unshift({id:uid(),srcId:'',org,position:$('#m_pos').value.trim(),category:$('#m_cat').value,batch:$('#m_batch').value.trim(),deadline:$('#m_dl').value||'',source:$('#m_src').value.trim()||'手动补充',url:'',status:'未投递',note:''});
+    LS.set('qz_positions',POSITIONS); closeModal(); renderJobs(); toast('已新增岗位');
+  });
+});
+
+/* ============ 简历定制（已移除） ============ */
+
+/* ============ 面试进度 ============ */
+function renderInterviews(){
+  if(!POSITIONS.length && !INTERVIEWS.length){ $('#interviewList').innerHTML='<div class="empty">还没有面试记录，先到「岗位管理」录入岗位</div>'; return; }
+  if(!INTERVIEWS.length){ $('#interviewList').innerHTML='<div class="empty">暂无面试记录，点「记录一场面试」开始</div>'; return; }
+  const order=INTERVIEWS.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  $('#interviewList').innerHTML=order.map(iv=>{
+    const p=POSITIONS.find(x=>x.id===iv.jobId);
+    return `<div class="card" style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <b style="font-family:var(--serif)">${esc(p?p.org:'（已删岗位）')} · ${esc(iv.round||'面试')}</b>
+        <span class="muted">${esc(iv.date||'')} · ${esc(iv.form||'')}</span></div>
+      <div class="kv"><b>岗位：</b>${esc(p?p.position:'-')}</div>
+      <div class="kv"><b>问题与回答：</b></div><div class="muted" style="white-space:pre-wrap">${esc(iv.qa||'（未填）')}</div>
+      <div class="kv"><b>复盘：</b></div><div class="muted" style="white-space:pre-wrap">${esc(iv.review||'（未填）')}</div>
+      <div class="kv"><b>结果：</b><span class="pill ${iv.result&&iv.result.includes('通过')?'on':''}">${esc(iv.result||'待定')}</span></div>
+      <div style="margin-top:8px"><button class="btn sm ghost" data-ivi="${iv.id}">编辑</button> <button class="btn sm" data-ivd="${iv.id}" style="background:#F3D9D3;color:#B23A26">删除</button></div>
+    </div>`;
+  }).join('');
+  $$('#interviewList [data-ivi]').forEach(b=>b.addEventListener('click',()=>editInterview(b.dataset.ivi)));
+  $$('#interviewList [data-ivd]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('删除该面试记录？')){ INTERVIEWS=INTERVIEWS.filter(x=>x.id!==b.dataset.ivd); LS.set('qz_interviews',INTERVIEWS); renderInterviews(); }}));
+}
+$('#btnAddInterview').addEventListener('click',()=>editInterview(null));
+function editInterview(id){
+  const iv=id?INTERVIEWS.find(x=>x.id===id):{id:uid(),jobId:'',date:new Date().toISOString().slice(0,10),round:'一面',form:'视频',qa:'',review:'',result:'待定'};
+  const opts=POSITIONS.map(p=>`<option value="${p.id}" ${p.id===iv.jobId?'selected':''}>${esc(p.org)} - ${esc(p.position)}</option>`).join('') || '<option value="">（无岗位，先去录入）</option>';
+  openModal(`<h3>${id?'编辑':'记录'}面试</h3>
+    <div class="field"><label>关联岗位</label><select id="i_job">${opts}</select></div>
+    <div class="field"><label>日期</label><input id="i_date" type="date" value="${esc(iv.date)}"></div>
+    <div class="row"><div class="field"><label>轮次</label><select id="i_round"><option ${iv.round==='笔试'?'selected':''}>笔试</option><option ${iv.round==='一面'?'selected':''}>一面</option><option ${iv.round==='二面'?'selected':''}>二面</option><option ${iv.round==='终面'?'selected':''}>终面</option><option ${!['笔试','一面','二面','终面'].includes(iv.round)?'selected':''}>其他</option></select></div>
+    <div class="field"><label>形式</label><select id="i_form"><option ${iv.form==='电话'?'selected':''}>电话</option><option ${iv.form==='视频'?'selected':''}>视频</option><option ${iv.form==='现场'?'selected':''}>现场</option></select></div></div>
+    <div class="field"><label>问题与回答</label><textarea id="i_qa" rows="5">${esc(iv.qa)}</textarea></div>
+    <div class="field"><label>复盘（做得好 / 待改进）</label><textarea id="i_review" rows="4">${esc(iv.review)}</textarea></div>
+    <div class="field"><label>结果</label><select id="i_res"><option ${iv.result==='待定'?'selected':''}>待定</option><option ${iv.result==='通过'?'selected':''}>通过</option><option ${iv.result==='未通过'?'selected':''}>未通过</option></select></div>
+    <div style="text-align:right;margin-top:10px"><button class="btn ghost" onclick="closeModal()">取消</button> <button class="btn coral" id="i_save">保存</button></div>`);
+  $('#i_save').addEventListener('click',()=>{
+    iv.jobId=$('#i_job').value; iv.date=$('#i_date').value; iv.round=$('#i_round').value; iv.form=$('#i_form').value;
+    iv.qa=$('#i_qa').value; iv.review=$('#i_review').value; iv.result=$('#i_res').value;
+    if(!id) INTERVIEWS.unshift(iv); LS.set('qz_interviews',INTERVIEWS); closeModal(); renderInterviews(); toast('已保存面试记录');
+  });
+}
+
+/* ============ 面试中 → 自动建「一面」 ============ */
+// 状态变为「面试中」且尚无该岗位面试记录时，自动填入面试进度一条「一面」
+function ensureInterviewFor(p){
+  if(!p || p.status!=='面试中') return false;
+  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false; // 已有该岗位记录则不重复建
+  INTERVIEWS.unshift({id:uid(),jobId:p.id,date:new Date().toISOString().slice(0,10),round:'一面',form:'视频',qa:'',review:'',result:'待定'});
+  return true;
+}
+// 初始化时补齐：无论状态是 UI 改的、import 导入的、还是手动改的 localStorage，只要「面试中」且缺记录就建（幂等）
+function syncInterviews(){
+  let added=0; POSITIONS.forEach(p=>{ if(ensureInterviewFor(p)) added++; });
+  if(added) LS.set('qz_interviews',INTERVIEWS);
+  return added;
+}
+
+/* ============ 弹窗 ============ */
+function openModal(html){ $('#modalBox').innerHTML=html; $('#modalBg').classList.add('show'); }
+function closeModal(){ $('#modalBg').classList.remove('show'); }
+$('#modalBg').addEventListener('click',e=>{ if(e.target===$('#modalBg')) closeModal(); });
+
+/* ============ 初始化 ============ */
+syncInterviews(); // 补齐「面试中」岗位对应的「一面」记录（幂等）
+renderPool();
+toast(dataOk()? '信息池已加载 '+RECRUIT.records.length+' 条' : '未检测到 recruit-seed.js');
+</script>
+</body>
+</html>
