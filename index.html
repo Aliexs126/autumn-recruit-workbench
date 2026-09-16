@@ -12,7 +12,6 @@
     --coral:#FF7A66; --coral-d:#E85C47; --coral-soft:#FFE6E0;
     --serif:"Songti SC","Noto Serif SC",Georgia,"Times New Roman",serif;
     --sans:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-    /* 动效缓动曲线（强 ease-out，内置缓动太弱） */
     --ease-out:cubic-bezier(0.23,1,0.32,1);
     --ease-in-out:cubic-bezier(0.77,0,0.175,1);
     --ease-drawer:cubic-bezier(0.32,0.72,0,1);
@@ -21,7 +20,6 @@
   html,body{margin:0;height:100%}
   body{background:var(--cream);color:var(--ink);font-family:var(--sans);line-height:1.6}
   .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
-  /* sidebar */
   .side{background:linear-gradient(180deg,#EFE7FA,#E3D8F3);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto}
   .brand{font-family:var(--serif);font-size:22px;font-weight:800;color:var(--purple-deep);margin-bottom:4px;line-height:1.25}
   .brand small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
@@ -33,7 +31,6 @@
   .nav-btn:active{transform:scale(0.98)}
   .nav-btn.active{background:#fff;color:var(--purple-deep);font-weight:700;box-shadow:0 4px 14px rgba(110,82,166,.12)}
   .side .foot{margin-top:auto;font-size:11px;color:var(--muted);padding-top:14px;border-top:1px solid rgba(110,82,166,.18)}
-  /* main */
   .main{padding:26px 30px 60px;overflow:auto}
   h1,h2,h3{font-family:var(--serif);font-weight:800}
   .page-title{font-size:26px;margin:0 0 2px}
@@ -74,7 +71,6 @@
   .tip{background:var(--coral-soft);border:1px solid var(--coral);color:var(--coral-d);padding:10px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;font-weight:600}
   .muted{color:var(--muted);font-size:12px}
   .note{color:var(--muted);font-size:11px}
-  /* 今日推荐 */
   .rec-card{background:linear-gradient(135deg,#FBEDE7,#F4ECFB);border:1px solid var(--coral-soft);border-radius:16px;padding:16px 18px;margin:6px 0 18px}
   .rec-head{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:12px}
   .rec-head .muted{font-size:11.5px;font-weight:400;margin-left:8px}
@@ -117,9 +113,7 @@
     .main{padding:18px 16px 50px}
     .grid-stats{grid-template-columns:repeat(2,1fr)}
   }
-  /* 键盘焦点可见性（a11y） */
   :focus-visible{outline:2px solid var(--coral-d);outline-offset:2px;border-radius:8px}
-  /* 减少动态：保留透明度/颜色过渡，去掉位移与缩放手势 */
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-property:opacity!important}
     .page.show{animation:none}
@@ -138,7 +132,6 @@
   </aside>
 
   <main class="main">
-    <!-- 信息池看板 -->
     <section class="page show" id="page-pool">
       <h1 class="page-title">信息池看板</h1>
       <p class="page-sub">每日 8:00 自动搜集更新 · 仅 2027 届 · 已排除社招 · 来源：国资委 / 中国公共招聘网 / 国聘网 / 各集团与大厂官网</p>
@@ -157,7 +150,6 @@
       </div>
     </section>
 
-    <!-- 岗位管理 -->
     <section class="page" id="page-jobs">
       <h1 class="page-title">岗位管理</h1>
       <p class="page-sub">自动抓取（信息池一键录入）+ 手动补充 · 全链路追踪</p>
@@ -175,9 +167,6 @@
       </div>
     </section>
 
-    <!-- 简历定制模块已移除；面试准备也移至 WorkBuddy，提示见「面试进度」顶部 -->
-
-    <!-- 面试进度 -->
     <section class="page" id="page-interview">
       <h1 class="page-title">面试进度</h1>
       <p class="page-sub">统一记录每场面试的问题与复盘</p>
@@ -185,25 +174,19 @@
       <div class="toolbar"><button class="btn coral" id="btnAddInterview">+ 记录一场面试</button></div>
       <div id="interviewList"></div>
     </section>
-
-    <!-- 面试准备模块已移除：提示见「面试进度」顶部 -->
-
-    <!-- 独立看板模块已移除 -->
   </main>
 </div>
 
-<!-- 通用弹窗 -->
 <div class="modal-bg" id="modalBg"><div class="modal" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 
-<!-- 信息池数据（同目录，定时任务更新后刷新） -->
 <script src="recruit-seed.js"></script>
 <script>
 /* ============ 内嵌信息池数据（单文件自包含：无 recruit-seed.js 也可直接用） ============ */
 window.__RECRUIT_DATA__ = {
   "meta": {
     "title": "2027届秋招信息池",
-    "updatedAt": "2026-09-15",
+    "updatedAt": "2026-09-16",
     "owner": "刘峻豪",
     "scope": "仅面向2027届毕业生；仅保留校招/秋招公告（含银行等公共管理可投岗位，已移除专业不对口单位）",
     "sources": [
@@ -228,7 +211,7 @@ window.__RECRUIT_DATA__ = {
       "临沂12345政务公开·国企招聘专栏 12345.linyi.gov.cn",
       "各地市人社局官网（事业单位招聘公告）"
     ],
-    "note": "已按用户画像（本科土地资源管理+硕士公共管理学·土地资源管理方向）筛选：仅保留2027届校招/秋招公告。六大行（工行/中行/农行/建行/交行/邮储）与政策性银行（国家开发银行）已入池——管理培训生、客户经理、综合管理岗不限专业，公共管理可投；中国邮政集团（含山东邮政“菁英赋能”管培生，专业不限）与中国国新（综合职能类含公共管理）已入池；互联网大厂、石油、电信、电网等专业不对口单位已移除；临沂罗开控股、兰陵新思想两条原社招记录已改为2027届校招待公告占位。deadline 为空表示官方公告未公布截止时间（招满即止或待公告），未做编造；带“预测”字样为往年节奏推测，以官网为准。“未发布/待公告”条目为追踪清单，公告发布后由每日8:00任务自动转为可投。数据更新于2026-09-15。"
+    "note": "已按用户画像（本科土地资源管理+硕士公共管理学·土地资源管理方向）筛选：仅保留2027届校招/秋招公告。六大行（工行/中行/农行/建行/交行/邮储）、政策性银行（国家开发银行）与金融央企（中国东方资产）已入池——管理培训生、客户经理、综合管理岗含公共管理可投；中国邮政集团（含山东邮政管培生专业不限）、中国国新（综合职能类含公共管理）已入池；山东本地国企（山东能源集团经营管理类、中国有研含山东多地）、交通运输部所属事业单位2027第一批、山东省选调生追踪占位已入池；互联网大厂、石油、电信、电网等专业不对口单位已移除；临沂罗开控股、兰陵新思想两条原社招记录已改为2027届校招待公告占位。deadline 为空表示官方公告未公布截止时间（招满即止或待公告），未做编造；带“预测”字样为往年节奏推测，以官网为准。“未发布/待公告”条目为追踪清单，公告发布后由每日8:00任务自动转为可投。数据更新于2026-09-16。"
   },
   "records": [
     {
@@ -659,9 +642,74 @@ window.__RECRUIT_DATA__ = {
       "publishedAt": "2026-09-08",
       "url": "https://scdc.jnu.edu.cn/campus/view/id/1036945",
       "target": "2027届本科及以上"
+    },
+    {
+      "id": "coamc-2027",
+      "org": "中国东方资产管理股份有限公司",
+      "position": "总部管培生 / 各分公司业务岗（含山东省分公司；需求专业含公共管理学等管理类）",
+      "category": "央国企",
+      "batch": "正式批",
+      "deadline": "2026-09-18",
+      "deadlineNote": "简历投递即日起至2026-09-18；中央金融企业（四大AMC之一），2027年应届硕士及以上，山东分公司在招，报名入口 coamc.zhiye.com/campus",
+      "source": "中国东方资产管理官网（高校人才网转载）",
+      "publishedAt": "2026-08-20",
+      "url": "https://coamc.zhiye.com/campus",
+      "target": "2027届硕士及以上（2027.1-2027.7毕业）"
+    },
+    {
+      "id": "mot-2027",
+      "org": "交通运输部所属事业单位",
+      "position": "2027年度第一批统一公开招聘（11家直属单位183人，含规划研究院/管理干部学院等，综合管理/专业技术岗）",
+      "category": "央国企",
+      "batch": "正式批",
+      "deadline": "2026-09-21",
+      "deadlineNote": "报名9.15 9:00-9.21 18:00，笔试暂定9.29；招聘对象2027年应届（含两年择业期未就业）；专业参考目录含管理类，需对照岗位表确认公共管理可报岗位；报名入口 rccp.jtzyzg.org.cn",
+      "source": "交通运输部官网 xxgk.mot.gov.cn",
+      "publishedAt": "2026-09-14",
+      "url": "https://rccp.jtzyzg.org.cn",
+      "target": "2027届（含两年择业期未就业）"
+    },
+    {
+      "id": "sd-energy-2027",
+      "org": "山东能源集团",
+      "position": "2027年高校毕业生校园招聘（经营管理类等，另设高层次人才校招）",
+      "category": "央国企",
+      "batch": "正式批",
+      "deadline": "",
+      "deadlineNote": "2026-09-10正式开启，各岗位招满后关闭；招聘专业含经营管理类（公共管理可投），山东能源集团为世界500强省属国企；报名入口 zhaopin.shandong-energy.com/recruit",
+      "source": "山东能源集团官网/山东省国资委（选择山东）",
+      "publishedAt": "2026-09-10",
+      "url": "https://zhaopin.shandong-energy.com/recruit",
+      "target": "2027届本科及以上"
+    },
+    {
+      "id": "griot-2027",
+      "org": "中国有研科技集团",
+      "position": "2027届校园招聘（财务专员/销售经理/企管专员等管理类岗位，30家子公司200余人）",
+      "category": "央国企",
+      "batch": "正式批",
+      "deadline": "",
+      "deadlineNote": "2026-09-14发布，招满即止；重点需求专业含管理学；工作地点含山东（德州/乐陵/青岛/荣成/滨州）等",
+      "source": "中国有研科技集团官网（高校人才网/高校就业网转载）",
+      "publishedAt": "2026-09-14",
+      "url": "https://www.gaoxiaojob.com/announcement/detail/430797.html",
+      "target": "2027届"
+    },
+    {
+      "id": "sd-xds-2027",
+      "org": "山东省选调生（省委组织部）",
+      "position": "山东省2027年度选拔录用选调生（定向/常规，公共管理类专业对口）",
+      "category": "央国企",
+      "batch": "2027年度（未发布）",
+      "deadline": "",
+      "deadlineNote": "预计2026年10月发布公告（预测，以灯塔-党建在线公告为准）；参考2026年度：第一批专额定向10月报名10月底笔试，第二批常规11月报名；报名入口 灯塔-党建在线",
+      "source": "灯塔-党建在线 dtdjzx.gov.cn",
+      "publishedAt": "",
+      "url": "https://cms.dtdjzx.gov.cn/staticPage/lyxds/lyxdssy.html",
+      "target": "2027届硕士（限中共党员/学生干部等，按公告）"
     }
   ],
-  "generatedAt": "2026-09-15T00:45:18.883Z"
+  "generatedAt": "2026-09-16T00:34:41.256Z"
 };
 /* 说明：上方为内嵌数据快照；如需每日更新，请将最新 recruit-seed.js 放同目录后点「刷新数据」，将自动覆盖。 */
 
@@ -751,7 +799,6 @@ $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
 }));
 
 /* ============ 信息池看板 ============ */
-// 复制文本（优先 clipboard API，失败回退 execCommand）
 function copyText(t,label){
   const done=()=>toast('已复制：'+(label||t));
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -763,13 +810,11 @@ function fallbackCopy(t,done){
   try{ document.execCommand('copy'); done&&done(); }catch(e){ toast('复制失败，请手动复制'); }
   document.body.removeChild(ta);
 }
-// JD / 公告链接：优先取用户右键修正后的覆盖值，否则用 seed 里的原始值
 function effUrl(r){
   const ov=LS.get('qz_url_ovr',{});
   const o=ov[r.id];
   return (o && o.url) ? o.url : (r.url||'');
 }
-// 右键编辑岗位的 JD / 公告链接（存 localStorage，可随时改回）
 function editUrl(id){
   const r=RECRUIT.records.find(x=>x.id===id); if(!r) return;
   const ov=LS.get('qz_url_ovr',{});
@@ -789,7 +834,6 @@ function editUrl(id){
     toast(v?'JD 链接已更新':'已恢复默认链接');
   });
 }
-// 按天确定性取 3 个报名中岗位（同日稳定、跨天变化）
 function renderDailyRec(){
   const recs=RECRUIT.records||[];
   const key=todayKey();
@@ -819,7 +863,6 @@ function renderDailyRec(){
   $$('#dailyRec [data-refresh-rec]').forEach(b=>b.addEventListener('click',refreshDailyRec));
   $$('#dailyRec [data-jd]').forEach(a=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
 }
-// 今日推荐的确定性种子：同一天稳定、刷新换一批、跨天自动重置
 function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function daySeed(){
   const key=todayKey();
@@ -995,14 +1038,12 @@ function editInterview(id){
 }
 
 /* ============ 面试中 → 自动建「一面」 ============ */
-// 状态变为「面试中」且尚无该岗位面试记录时，自动填入面试进度一条「一面」
 function ensureInterviewFor(p){
   if(!p || p.status!=='面试中') return false;
-  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false; // 已有该岗位记录则不重复建
+  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false;
   INTERVIEWS.unshift({id:uid(),jobId:p.id,date:new Date().toISOString().slice(0,10),round:'一面',form:'视频',qa:'',review:'',result:'待定'});
   return true;
 }
-// 初始化时补齐：无论状态是 UI 改的、import 导入的、还是手动改的 localStorage，只要「面试中」且缺记录就建（幂等）
 function syncInterviews(){
   let added=0; POSITIONS.forEach(p=>{ if(ensureInterviewFor(p)) added++; });
   if(added) LS.set('qz_interviews',INTERVIEWS);
@@ -1015,7 +1056,7 @@ function closeModal(){ $('#modalBg').classList.remove('show'); }
 $('#modalBg').addEventListener('click',e=>{ if(e.target===$('#modalBg')) closeModal(); });
 
 /* ============ 初始化 ============ */
-syncInterviews(); // 补齐「面试中」岗位对应的「一面」记录（幂等）
+syncInterviews();
 renderPool();
 toast(dataOk()? '信息池已加载 '+RECRUIT.records.length+' 条' : '未检测到 recruit-seed.js');
 </script>
