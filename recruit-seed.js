@@ -1,7 +1,7 @@
 window.__RECRUIT_DATA__ = {
   "meta": {
     "title": "2027届秋招信息池",
-    "updatedAt": "2026-09-23",
+    "updatedAt": "2026-09-24",
     "owner": "刘峻豪",
     "scope": "仅面向2027届毕业生；仅保留校招/秋招公告（含银行等公共管理可投岗位，已移除专业不对口单位）",
     "sources": [
@@ -26,7 +26,7 @@ window.__RECRUIT_DATA__ = {
       "临沂12345政务公开·国企招聘专栏 12345.linyi.gov.cn",
       "各地市人社局官网（事业单位招聘公告）"
     ],
-    "note": "已按用户画像（本科土地资源管理+硕士公共管理学·土地资源管理方向）筛选：仅保留2027届校招/秋招公告。六大行、政策性银行与金融央企已入池——管理培训生、客户经理、综合管理岗含公共管理可投；山东本地国企、自然资源/规划设计院类、事业单位追踪占位已入池；专业不对口单位已移除。deadline 为空表示官方公告未公布截止时间（招满即止或待公告），未做编造；带预测字样为往年节奏推测，以官网为准。数据更新于2026-09-23，共57条。 2026-09-23新增：齐鲁银行（10.15截止，总部济南城商行，含济南/青岛/烟台/临沂岗位）、平安银行济南分行（11.6截止，专业不限，含临沂/淄博/济宁/泰安/潍坊/东营）。今日关键提醒：武汉规划研究院wh-plan-2027 9-24 16:00截止（明天）。"
+    "note": "已按用户画像（本科土地资源管理+硕士公共管理学·土地资源管理方向）筛选：仅保留2027届校招/秋招公告。六大行、政策性银行与金融央企已入池——管理培训生、客户经理、综合管理岗含公共管理可投；山东本地国企、自然资源/规划设计院类、事业单位追踪占位已入池；专业不对口单位已移除。deadline 为空表示官方公告未公布截止时间（招满即止或待公告），未做编造；带预测字样为往年节奏推测，以官网为准。数据更新于2026-09-24，共59条。 2026-09-23新增：齐鲁银行（10.15截止，总部济南城商行，含济南/青岛/烟台/临沂岗位）、平安银行济南分行（11.6截止，专业不限，含临沂/淄博/济宁/泰安/潍坊/东营）。2026-09-24新增：中国人寿保险2027校招（总部10.15/下辖机构含山东11.15截止，综合营销运营管理类公共管理可投）、山东省城乡规划设计研究院专业技术岗（济南甲级院，硕士，邮箱投递招满即止，城乡规划/土地资源/GIS对口）。注意：武汉市规划研究院选聘生wh-plan-2027今日9-24 16:00截止。"
   },
   "records": [
     {"id":"gz-transport-plan-2027","org":"广州市交通规划研究院","position":"国土空间与地理科学类（城乡规划 / 土地资源管理 / 人文地理 / GIS / 遥感等）","category":"央国企","batch":"正式批","deadline":"2026-10-16","deadlineNote":"网申至2026-10-16；硕士及以上，实习考察两周","source":"2027秋招公告（via 超级简历）","publishedAt":"2026-08-19","url":"https://www.chaojijianli.com/xiaozhao/guangzhou-transport-planning-institute-2027-fall-12570-cd4901/","target":"2027届硕士及以上"},
@@ -68,7 +68,7 @@ window.__RECRUIT_DATA__ = {
     {"id":"griot-2027","org":"中国有研科技集团","position":"2027届校园招聘（财务/销售/企管等管理类岗位，30家子公司200余人；含山东多地）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2026-09-14发布，招满即止；重点需求专业含管理学","source":"中国有研科技集团官网（高校人才网转载）","publishedAt":"2026-09-14","url":"https://www.gaoxiaojob.com/announcement/detail/430797.html","target":"2027届"},
     {"id":"sd-xds-2027","org":"山东省选调生（省委组织部）","position":"山东省2027年度选拔录用选调生（定向/常规，公共管理类专业对口）","category":"央国企","batch":"2027年度（未发布）","deadline":"","deadlineNote":"预计2026年10月发布公告（预测，以灯塔-党建在线公告为准）","source":"灯塔-党建在线 dtdjzx.gov.cn","publishedAt":"","url":"https://cms.dtdjzx.gov.cn/staticPage/lyxds/lyxdssy.html","target":"2027届硕士（限中共党员/学生干部等）"},
     {"id":"adbc-2027","org":"中国农业发展银行","position":"2027年度校园招聘（信贷管理 / 综合管理 / 财务会计等）","category":"央国企","batch":"正式批","deadline":"2026-10-11","deadlineNote":"网上报名9.15-10.11 24:00；笔试11月初线下统一笔试","source":"中国农业发展银行官网","publishedAt":"2026-09-15","url":"https://www.adbc.com.cn","target":"2027届应届毕业生"},
-    {"id":"wh-plan-2027","org":"武汉市规划研究院","position":"2027年选聘生（事业单位，需求专业含公共管理学/城乡规划学/地理学）","category":"央国企","batch":"正式批","deadline":"2026-09-24","deadlineNote":"网上报名9.12 9:00至9.24 16:00；共招6人3个职位，硕士及以上；面试初步定于11月14-16日","source":"武汉市人社局（高校人才网转载）","publishedAt":"2026-09-15","url":"https://www.whzg.gov.cn","target":"2027届应届硕士/博士"},
+    {"id":"wh-plan-2027","org":"武汉市规划研究院","position":"2027年选聘生（事业单位，需求专业含公共管理学/城乡规划学/地理学）","category":"央国企","batch":"正式批","deadline":"2026-09-24","deadlineNote":"网上报名9.12 9:00至9.24 16:00今日截止；共招6人3个职位，硕士及以上；面试初步定于11月14-16日","source":"武汉市人社局（高校人才网转载）","publishedAt":"2026-09-15","url":"https://www.whzg.gov.cn","target":"2027届应届硕士/博士"},
     {"id":"eximbank-2027","org":"中国进出口银行","position":"2027年度校园招聘（总行及境内分行，经济金融/法律/管理类等）","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"2027年度预计2026年10月下旬发布公告（预测，以官网为准）","source":"中国进出口银行官网 eximbank.gov.cn","publishedAt":"","url":"http://www.eximbank.gov.cn/info/notice/recruit/index.html","target":"2027届应届毕业生"},
     {"id":"sadi-2027","org":"四川省建筑设计研究院有限公司（SADI）","position":"2027届校园招聘（国土整治技术岗：土地资源/国土规划相关专业，成都）","category":"央国企","batch":"正式批","deadline":"2027-06-30","deadlineNote":"国土整治技术岗专业要求土地资源管理/国土测绘与规划；邮箱61981369@qq.com","source":"四川省建筑设计研究院官网（高校就业网转载）","publishedAt":"2026-09-14","url":"http://job.bjfu.edu.cn/","target":"2027届本科及以上"},
     {"id":"ippr-2027","org":"中国中元国际工程有限公司","position":"2027届校园招聘（城市规划设计等，北京；央企·国机集团子公司）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"往年校招9月中旬启动、11月中旬截止（预测，以官网为准）；报名入口 ippr.com.cn/rczy/cpyc","source":"中国中元官网（应届生求职网发布）","publishedAt":"2026-09-17","url":"http://www.ippr.com.cn/rczy/cpyc/","target":"2027届硕士及以上"},
@@ -85,7 +85,9 @@ window.__RECRUIT_DATA__ = {
     {"id":"weifang-bank-2027","org":"潍坊银行","position":"2027校园招聘（管培生：经济学/管理学/法学类；营业网点业务岗专业不限经管优先；含潍坊/青岛/烟台/临沂等）","category":"央国企","batch":"正式批","deadline":"2026-11-10","deadlineNote":"网上报名9月-2026-11-10截止；网点业务岗本科可报专业不限，管培生需2027届硕士；报名入口 wfbank2027.zhaopin.com","source":"潍坊银行2027校招简章（齐鲁网/大众网）","publishedAt":"2026-09-17","url":"https://wfbank2027.zhaopin.com","target":"2027届（网点业务岗2026/2027届本科及以上）"},
     {"id":"hubei-plan-2027","org":"湖北省规划设计研究总院","position":"2027校园招聘（土地规划设计岗：土地资源管理/农田水利工程等专业，武汉）","category":"央国企","batch":"正式批","deadline":"2026-11-16","deadlineNote":"网申截止2026-11-16；面向2027届及离校2年内毕业生，硕士及以上，每人限投1岗；隶属中南建筑设计院（CSADI）；投递邮箱 ghzy_hr@csadi.cn","source":"湖北省规划设计研究总院27秋招（超级简历/官网）","publishedAt":"2026-09-19","url":"https://www.hbsghy.com/JobPosting_list.html","target":"2027届硕士及以上"},
     {"id":"qilu-bank-2027","org":"齐鲁银行","position":"2027校园招聘（管培生 / 综合柜员 / 客户经理；工作地点含济南/青岛/烟台/临沂/潍坊/济宁等山东全省及天津）","category":"央国企","batch":"正式批","deadline":"2026-10-15","deadlineNote":"网申截止2026-10-15；报名入口 xy.liepin.com/qlbank2027；综合柜员/客户经理岗，经管类可投；齐鲁银行为总部济南的山东城商行（已上市）","source":"齐鲁银行官网 qlbchina.com","publishedAt":"2026-09-17","url":"https://xy.liepin.com/qlbank2027","target":"2027届本科及以上"},
-    {"id":"pingan-jn-2027","org":"平安银行济南分行","position":"2027届秋季校园招聘（零售/公司/业务/运营培训生；工作地点含济南/临沂/淄博/济宁/泰安/潍坊/东营）","category":"央国企","batch":"正式批","deadline":"2026-11-06","deadlineNote":"网申8月10日-11月6日截止；专业不限（经济/金融/管理学优先）；笔试面试8-11月滚动进行；报名入口平安银行校园招聘官网 campus.pingan.com","source":"平安银行校园招聘（多所高校就业网转载）","publishedAt":"2026-08-14","url":"https://campus.pingan.com","target":"2027届本科及以上（2026.1-2027.7毕业）"}
+    {"id":"pingan-jn-2027","org":"平安银行济南分行","position":"2027届秋季校园招聘（零售/公司/业务/运营培训生；工作地点含济南/临沂/淄博/济宁/泰安/潍坊/东营）","category":"央国企","batch":"正式批","deadline":"2026-11-06","deadlineNote":"网申8月10日-11月6日截止；专业不限（经济/金融/管理学优先）；笔试面试8-11月滚动进行；报名入口平安银行校园招聘官网 campus.pingan.com","source":"平安银行校园招聘（多所高校就业网转载）","publishedAt":"2026-08-14","url":"https://campus.pingan.com","target":"2027届本科及以上（2026.1-2027.7毕业）"},
+    {"id":"china-life-2027","org":"中国人寿保险（股份公司）","position":"2027年度校园招聘（营销管理 / 运营管理 / 综合职能类；公共管理/经管类可投）","category":"央国企","batch":"正式批","deadline":"2026-11-15","deadlineNote":"总部即日起至10月15日；下辖机构（含山东省分公司）最晚至11月15日，建议尽早投递；每人可填3个志愿","source":"中国人寿招聘官网 chinalife.com.cn（人才招聘·校园招聘）","publishedAt":"2026-09-09","url":"https://www.chinalife.com.cn/chinalife/","target":"2027届应届毕业生（含25-27届）"},
+    {"id":"sd-ghy-2027","org":"山东省城乡规划设计研究院有限公司","position":"专业技术岗（城乡规划 / 土地资源 / GIS 方向，济南，硕士及以上）","category":"央国企","batch":"正式批（滚动招聘）","deadline":"","deadlineNote":"邮箱投递简历+作品集，招满即止；国家甲级城市规划/建筑设计院，工作地点济南","source":"山东省城乡规划设计研究院 sdghy.com（高校就业网转载）","publishedAt":"2026-09-09","url":"https://www.sdghy.com/","target":"2027届硕士及以上"}
   ],
-  "generatedAt": "2026-09-23T00:36:00.000Z"
+  "generatedAt": "2026-09-24T00:36:00.000Z"
 };
