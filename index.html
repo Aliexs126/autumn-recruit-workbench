@@ -12,6 +12,7 @@
     --coral:#FF7A66; --coral-d:#E85C47; --coral-soft:#FFE6E0;
     --serif:"Songti SC","Noto Serif SC",Georgia,"Times New Roman",serif;
     --sans:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    /* 动效缓动曲线（强 ease-out，内置缓动太弱） */
     --ease-out:cubic-bezier(0.23,1,0.32,1);
     --ease-in-out:cubic-bezier(0.77,0,0.175,1);
     --ease-drawer:cubic-bezier(0.32,0.72,0,1);
@@ -20,6 +21,7 @@
   html,body{margin:0;height:100%}
   body{background:var(--cream);color:var(--ink);font-family:var(--sans);line-height:1.6}
   .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+  /* sidebar */
   .side{background:linear-gradient(180deg,#EFE7FA,#E3D8F3);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto}
   .brand{font-family:var(--serif);font-size:22px;font-weight:800;color:var(--purple-deep);margin-bottom:4px;line-height:1.25}
   .brand small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
@@ -31,6 +33,7 @@
   .nav-btn:active{transform:scale(0.98)}
   .nav-btn.active{background:#fff;color:var(--purple-deep);font-weight:700;box-shadow:0 4px 14px rgba(110,82,166,.12)}
   .side .foot{margin-top:auto;font-size:11px;color:var(--muted);padding-top:14px;border-top:1px solid rgba(110,82,166,.18)}
+  /* main */
   .main{padding:26px 30px 60px;overflow:auto}
   h1,h2,h3{font-family:var(--serif);font-weight:800}
   .page-title{font-size:26px;margin:0 0 2px}
@@ -38,7 +41,7 @@
   .page{display:none} .page.show{display:block;animation:fade .18s var(--ease-out)}
   @keyframes fade{from{opacity:0}to{opacity:1}}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 18px rgba(110,82,166,.05);
-    transition:box-shadow 220ms var(--ease-out), transform 220ms var(--ease-out), border-color 200ms ease}
+    transition:box-shadow 220ms var(--ease-out), transform 220px var(--ease-out), border-color 200ms ease}
   @media (hover:hover) and (pointer:fine){
     .card:hover{box-shadow:0 12px 32px rgba(110,82,166,.12);transform:translateY(-2px);border-color:var(--purple-d)}
     .rec-item:hover{box-shadow:0 10px 26px rgba(232,92,71,.14);transform:translateY(-2px)}
@@ -71,6 +74,7 @@
   .tip{background:var(--coral-soft);border:1px solid var(--coral);color:var(--coral-d);padding:10px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;font-weight:600}
   .muted{color:var(--muted);font-size:12px}
   .note{color:var(--muted);font-size:11px}
+  /* 今日推荐 */
   .rec-card{background:linear-gradient(135deg,#FBEDE7,#F4ECFB);border:1px solid var(--coral-soft);border-radius:16px;padding:16px 18px;margin:6px 0 18px}
   .rec-head{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:12px}
   .rec-head .muted{font-size:11.5px;font-weight:400;margin-left:8px}
@@ -90,7 +94,7 @@
   .row>.col{flex:1;min-width:280px}
   .kv{font-size:13px;margin:4px 0}
   .kv b{color:var(--purple-deep)}
-  .modal-bg{position:fixed;inset:0;background:rgba(46,42,51,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms var(--ease-out),visibility 200ms var(--ease-out)}
+  .modal-bg{position:fixed;inset:0;background:rgba(46,42,51,.4);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 200ms var(--ease-out),visibility 200ms ease}
   .modal-bg.show{opacity:1;visibility:visible;pointer-events:auto}
   .modal{background:#fff;border-radius:16px;padding:22px;max-width:560px;width:100%;max-height:86vh;overflow:auto;
     transform:scale(0.96);opacity:0;transition:transform 220ms var(--ease-out),opacity 220ms var(--ease-out)}
@@ -106,14 +110,16 @@
   .qitem .a{margin-top:8px}
   pre.code{background:#2E2A33;color:#F3EEE5;border-radius:12px;padding:14px;white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.55;max-height:320px;overflow:auto}
   @media(max-width:860px){
-    .app{grid-template-columns:1fr}
+    .app{grid-template-columns:1fr} 
     .side{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px}
     .brand{width:100%} .nav-btn{flex:1 1 auto;justify-content:center;padding:8px 10px;font-size:12.5px}
     .side .foot{display:none}
     .main{padding:18px 16px 50px}
     .grid-stats{grid-template-columns:repeat(2,1fr)}
   }
+  /* 键盘焦点可见性（a11y） */
   :focus-visible{outline:2px solid var(--coral-d);outline-offset:2px;border-radius:8px}
+  /* 减少动态：保留透明度/颜色过渡，去掉位移与缩放手势 */
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-property:opacity!important}
     .page.show{animation:none}
@@ -130,7 +136,9 @@
     <button class="nav-btn" data-page="interview"><span class="ic">🎤</span>面试进度</button>
     <div class="foot">数据本地存储于浏览器<br>看板与 JSON 同目录自动刷新</div>
   </aside>
+
   <main class="main">
+    <!-- 信息池看板 -->
     <section class="page show" id="page-pool">
       <h1 class="page-title">信息池看板</h1>
       <p class="page-sub">每日 8:00 自动搜集更新 · 仅 2027 届 · 已排除社招 · 来源：国资委 / 中国公共招聘网 / 国聘网 / 各集团与大厂官网</p>
@@ -148,6 +156,8 @@
         </tr></thead><tbody></tbody></table>
       </div>
     </section>
+
+    <!-- 岗位管理 -->
     <section class="page" id="page-jobs">
       <h1 class="page-title">岗位管理</h1>
       <p class="page-sub">自动抓取（信息池一键录入）+ 手动补充 · 全链路追踪</p>
@@ -164,6 +174,10 @@
         </tr></thead><tbody></tbody></table>
       </div>
     </section>
+
+    <!-- 简历定制模块已移除；面试准备也移至 WorkBuddy，提示见「面试进度」顶部 -->
+
+    <!-- 面试进度 -->
     <section class="page" id="page-interview">
       <h1 class="page-title">面试进度</h1>
       <p class="page-sub">统一记录每场面试的问题与复盘</p>
@@ -171,15 +185,25 @@
       <div class="toolbar"><button class="btn coral" id="btnAddInterview">+ 记录一场面试</button></div>
       <div id="interviewList"></div>
     </section>
+
+    <!-- 面试准备模块已移除：提示见「面试进度」顶部 -->
+
+    <!-- 独立看板模块已移除 -->
   </main>
 </div>
+
+<!-- 通用弹窗 -->
 <div class="modal-bg" id="modalBg"><div class="modal" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
+
+<!-- 信息池数据（同目录，定时任务更新后刷新） -->
 <script src="recruit-seed.js"></script>
 <script>
-window.__RECRUIT_DATA__ = {"meta":{"title":"2027届秋招信息池","updatedAt":"2026-10-10","owner":"刘峻豪","scope":"仅面向2027届毕业生；仅保留校招/秋招公告（含银行等公共管理可投岗位，已移除专业不对口单位）","sources":["国务院国资委人事招聘专栏","中国公共招聘网","国聘网","国家大学生就业服务平台(24365)"],"note":"口径：仅2027届校招/秋招（已剔除社招与不对口单位）；deadline空=官方未公布（招满即止/待公告），未编造；带“预测”为往年节奏，以官网为准。待公告条目发布后自动转可投。更新于2026-10-10。"},"records":[{"id":"gz-transport-plan-2027","org":"广州市交通规划研究院","position":"人文地理 / GIS / 遥感等）…","category":"央国企","batch":"正式批","deadline":"2026-10-16","deadlineNote":"/GIS/遥感），硕士及以上，实习考察两周…","source":"2027秋招公告（via 超级简历）","publishedAt":"2026-08-19","url":"https://www.chaojijianli.com/xiaozhao/guangzhou-transport-planning-institute-2027-fall-12570-cd4901/"},{"id":"htgh-2027","org":"航天规划设计集团","position":"人）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"国聘网在招，招满即止；另有电气智能化设计、测绘等岗位","source":"国聘网 iguopin.com","publishedAt":"2026-09-02","url":"https://www.iguopin.com/company?id=10685386929595437"},{"id":"zz-plan-2027","org":"郑州市规划勘测设计研究院","position":"然资源和规划局主管）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届秋招宣讲会已启动，招满即止（以官网公告为准）","source":"应届生求职网宣讲会","publishedAt":"2026-08-12","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6034389"},{"id":"mnr-2027","org":"自然资源部所属事业单位","position":" 海洋等方向（直属事业单位公开招聘）…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"发布（预测，以人社部/自然资源部公告为准）…","source":"gkzp.cn/mnr…","publishedAt":"","url":"https://www.sydwgkzp.cn/mnr/index.html"},{"id":"sd-dnr-2027","org":"山东省自然资源厅所属事业单位","position":"等方向（山东省国土测绘院、地质调查院等）…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"3月发布（预测，以公告为准）…","source":".cn…","publishedAt":"","url":"http://dnr.shandong.gov.cn/"},{"id":"sdtd-group-2027","org":"山东土地集团（山东省土地发展集团有限公司）","position":"设 / 资本投资 / 自然资源方向，含“才聚齐鲁 成就未来”系列）…","category":"央国企","batch":"发布）…","deadline":"","deadlineNote":"校招预计2026年秋冬季发布（预测，以官网为准）；近期为2026年8-9月社招公告（19岗21人），应届生请紧盯校招通道…","source":"山东土地集团官网 sdtdfz.com","publishedAt":"","url":"https://www.sdtdfz.com/index/model?link=rlzy"},{"id":"lyct-group-2027","org":"临沂城市建设投资集团有限公司（临沂城投）","position":"业投资 / 人才服务等方向）…","category":"央国企","batch":"校招（未发布）","deadline":"","deadlineNote":"2年内毕业生，可作备选）；2027届校招待官方公告（预测，以官网为准）…","source":"n / 临沂城投官网 lyctgroup.com…","publishedAt":"","url":"http://lysgzw.linyi.gov.cn/listnew.jsp?urltype=tree.TreeTempUrl&wbtreeid=1040"},{"id":"sc-plan-institute-2027","org":"四川省国土空间规划研究院","position":"土地资源类（含土地资源管理、地图学与地理信息系统等专业）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"研究生，招满即止（以公告为准）…","source":"应届生求职网宣讲会","publishedAt":"2026-08-06","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_5731960"},{"id":"crec-design-2027","org":"中铁工程设计咨询集团（中铁设计）","position":"027届）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"网公告为准）…","source":"中铁设计招聘宣讲（云校招平台）","publishedAt":"2026-09-14","url":"https://51uns.bysjy.com.cn/Lecture/Details?id=708889&schoolcode=10710"},{"id":"powerchina-bj-2027","org":"中国电建集团北京勘测设计研究院","position":"水利水电 / 规划 / 勘察 / 设计（2027届秋招）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"招满即止（以官网为准）…","source":"高校就业信息网转载公告","publishedAt":"2026-09-09","url":"https://jy.cumtb.edu.cn/Zhaopin/xiaozhao.html?id=05bcd643-c929-bc85-2d91-07bf6a277e7b&type=1"},{"id":"cccc-rail-design-2027","org":"中交铁道设计研究总院","position":"设计咨询岗 / 工程技术岗（2027届校招）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国交建子公司；2027届校招中交轨道事业部设计咨询岗在招，招满即止","source":"中国交建招聘平台 ccccltd.zhiye.com","publishedAt":"2026-09-13","url":"https://ccccltd.zhiye.com/custom/xzzw?c1=253&hideMenu=1"},{"id":"avic-survey-2027","org":"中航勘察设计研究院","position":"生态治理工程师（资源与环境类）/ 测绘工程师","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国航空工业集团子公司；2027年校园招聘在招，硕士，招满即止","source":"国聘网 iguopin.com","publishedAt":"2026-09-02","url":"https://www.iguopin.com/company?id=10685311330019054"},{"id":"cccc-urban-invest-2027","org":"中交城市投资控股","position":"产业设计管理岗 / 产业投资拓展岗（2027届校招）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"士，招满即止…","source":"国聘网 iguopin.com","publishedAt":"2026-09-10","url":"https://www.iguopin.com/company?id=10685328323227156"},{"id":"cscec-zhidi-2027","org":"中建智地置业&中建智城","position":"人）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"投资开发类岗位，招满即止…","source":"南开就业网…","publishedAt":"2026-09-11","url":"https://recruit.cscec.com/recruit#/company?contract_unit=32043003&company_id=1873"},{"id":"ceec-2027","org":"中国能建（含所属设计院）","position":"2027届全球校招（规划设计 / 工程 / 管理类）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"众多，专业适配面广（以各院公告为准）…","source":"中国公共招聘网·央企招聘信息公开专栏","publishedAt":"2026-09-10","url":"http://www.job.mohrss.gov.cn/qyzp/"},{"id":"cmg-2027","org":"招商局集团","position":"2027届校园招聘（综合管理 / 职能类可投）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"综合开发，公共管理专业可投职能综合岗…","source":"中国公共招聘网·央企招聘信息公开专栏","publishedAt":"2026-09-10","url":"http://www.job.mohrss.gov.cn/qyzp/"},{"id":"sd-development-2027","org":"山东发展集团（济南）","position":"类）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"产业投资/资本运营/综合管理（公共管理适配）…","source":"济南市人社局 jnhrss.jinan.gov.cn","publishedAt":"2026-07-18","url":"https://jnhrss.jinan.gov.cn/col/col18309/art/2026/art_e527c2fda8a244eebb49a3ff1c540478.html"},{"id":"jinan-chengtou-2027","org":"济南城投集团","position":"集团及权属公司招聘（城市投资 / 建设开发 / 水务等）","category":"央国企","batch":"校招（未发布）","deadline":"","deadlineNote":"为准（预测，往年集中发布）…","source":"v.cn…","publishedAt":"","url":"https://www.jinan.gov.cn/zt/2025nzt/yhyshj/rcbf/qzzp/"},{"id":"cscec8b-2027","org":"中建八局发展建设公司（青岛）","position":"2027届秋招（工程技术 / 设计 / 管理类）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"发布，含管理类岗位，招满即止…","source":"中建八局发展建设公司（via 高校就业网）","publishedAt":"2026-08-20","url":"https://job.lzu.edu.cn/html/22/article/2026/91000.html"},{"id":"qingdao-plan-2027","org":"青岛市城市规划设计研究院","position":"国土空间 / 城乡规划 / 设计研究岗","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"人才招聘，2027届应届生招聘预计随青岛市事业单位统考发布（预测，以公告为准）…","source":"青岛政务网 qingdao.gov.cn","publishedAt":"","url":"http://www.qingdao.gov.cn/zwgk/xxgk/zygh/gkml/rsrm/202511/t20251106_10357309.shtml"},{"id":"powerchina-sd3-2027","org":"山东电力建设第三工程公司（青岛）","position":"2027届秋招（工程技术 / 管理类）","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"招预计9-10月发布（预测，以官网为准）…","source":"应届生求职网宣讲会","publishedAt":"","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6243505"},{"id":"cq-geores-2027","org":"重庆地质矿产研究院","position":"研岗…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"8万/年；2026年岗位已招满下线，2027届预计2026年底-2027年发布（预测，以公告为准）…","source":"国家大学生就业服务平台 ncss.cn","publishedAt":"","url":"https://www.ncss.cn/student/jobs/Pc1j1XMZ5FhyFeLMd326ye/detail.html"},{"id":"ly-luoopen-2027","org":"临沂罗开控股集团（罗庄区属国企）","position":"产业投资 / 产业园开发运营 / 土地熟化 / 城建开发","category":"央国企","batch":"发布）…","deadline":"","deadlineNote":"招公告以临沂市国资委/罗庄区政府官网为准，往年10-12月集中发布（预测，以公告为准）…","source":"临沂12345政务公开 / 罗庄区政府","publishedAt":"","url":"https://12345.linyi.gov.cn/gov/app/share/YS00MDktMTAwMTYyMjkw.html"},{"id":"ly-lanling-mining-2027","org":"兰陵新思想产业投资（兰陵县国企）","position":"绿色矿山 / 砂石资源整合 / 生态治理 / 产业链投资","category":"央国企","batch":"发布）…","deadline":"","deadlineNote":"027届校招公告以兰陵县政府官网为准（预测，以公告为准）…","source":"12345…","publishedAt":"","url":"https://www.lanling.gov.cn/info/1039/1478402.htm"},{"id":"icbc-2027","org":"中国工商银行","position":"合管理岗等，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"业，公共管理可报…","source":" / 工行官网 job.icbc.com.cn…","publishedAt":"2026-09-04","url":"https://job.icbc.com.cn"},{"id":"boc-2027","org":"中国银行","position":"户经理 / 管培生等，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-09","deadlineNote":"报名9.3-10.9 24:00，10月中下旬笔试；每人最多申请5个岗位","source":"om/pages/2027-boc…","publishedAt":"2026-09-03","url":"https://campus.chinahr.com/pages/2027-boc"},{"id":"abchina-2027","org":"中国农业银行","position":"合管理 / 科技专项等，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"报名即日起-10.8 24:00，笔试初定10月下旬或11月上旬","source":" / 农行招聘 career.abchina.com.cn…","publishedAt":"2026-09-04","url":"https://career.abchina.com.cn"},{"id":"ccb-2027","org":"中国建设银行","position":"合培训岗等，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"上；每人最多2个志愿…","source":"共招聘网…","publishedAt":"2026-09-04","url":"https://job2.ccb.com/cn/job/announcement.html?annoId=20260903163254718082"},{"id":"bocom-2027","org":"交通银行","position":"合管理岗等，专业不限；山东省分行含济南/烟台/临沂等岗位）…","category":"央国企","batch":"正式批","deadline":"2026-10-18","deadlineNote":"/数字金融/营运方向，覆盖济南/烟台/临沂等全省各地市；9.20山东大学中心校区宣讲；专业无硬性限制，公共管理可报…","source":"交通银行人才招聘 job.bankcomm.com","publishedAt":"2026-09-14","url":"https://job.bankcomm.com"},{"id":"psbc-2027","org":"中国邮政储蓄银行","position":"务经理 / 销售岗，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-07","deadlineNote":"类专业…","source":"邮储银行官网 psbc.com","publishedAt":"2026-09-07","url":"https://www.psbc.com/cn/gyyc/rczp/xyzp/202609/t20260907_460394.html"},{"id":"cdb-2027","org":"国家开发银行","position":"理 / 经济金融类，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-07","deadlineNote":"境内外一级分行+5家二级分行及子公司，每人可选报1-2家单位各1-2个岗位…","source":"com（多所高校就业网转载）…","publishedAt":"2026-09-12","url":"https://cdb2027.zhaopin.com"},{"id":"chinapost-2027","org":"中国邮政集团（含山东邮政）","position":"工商管理 / 综合管理类；山东邮政“菁英赋能”管培生硕士及以上专业不限）…","category":"央国企","batch":"正式批","deadline":"2026-10-31","deadlineNote":"每名应聘者最多申请2个单位各1个职位；山东邮政管培生1-2年培养进本部核心岗位…","source":"中国邮政集团官网 chinapost.com.cn","publishedAt":"2026-09-07","url":"https://www.chinapost.com.cn/cn/report/2609/1176-1.html"},{"id":"guoxin-2027","org":"中国国新控股","position":" 行政管理 / 工商管理 / 公共管理等）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"海/重庆/雄安/香港…","source":"中国国新官网（国资委专栏/高校就业网转载）","publishedAt":"2026-09-08","url":"https://scdc.jnu.edu.cn/campus/view/id/1036945"},{"id":"coamc-2027","org":"中国东方资产管理股份有限公司","position":"业含公共管理学等管理类）…","category":"央国企","batch":"正式批","deadline":"2026-09-18","deadlineNote":"27年应届硕士及以上，山东分公司在招，报名入口 coamc.zhiye.com/campus…","source":"中国东方资产管理官网（高校人才网转载）","publishedAt":"2026-08-20","url":"https://coamc.zhiye.com/campus"},{"id":"mot-2027","org":"交通运输部所属事业单位","position":"，含规划研究院/管理干部学院等，综合管理/专业技术岗）…","category":"央国企","batch":"正式批","deadline":"2026-09-21","deadlineNote":"027年应届（含两年择业期未就业）；专业参考目录含管理类，需对照岗位表确认公共管理可报岗位；报名入口 rccp.jtzyzg.org.cn…","source":"交通运输部官网 xxgk.mot.gov.cn","publishedAt":"2026-09-14","url":"https://rccp.jtzyzg.org.cn"},{"id":"sd-energy-2027","org":"山东能源集团","position":"人才校招）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"管理可投），山东能源集团为世界500强省属国企；报名入口 zhaopin.shandong-energy.com/recruit…","source":"山东能源集团官网/山东省国资委（选择山东）","publishedAt":"2026-09-10","url":"https://zhaopin.shandong-energy.com/recruit"},{"id":"griot-2027","org":"中国有研科技集团","position":"类岗位，30家子公司200余人）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"德州/乐陵/青岛/荣成/滨州）等…","source":"中国有研科技集团官网（高校人才网/高校就业网转载）","publishedAt":"2026-09-14","url":"https://www.gaoxiaojob.com/announcement/detail/430797.html"},{"id":"sd-xds-2027","org":"山东省选调生（省委组织部）","position":"业大学走第二批定向/常规，公共管理类可报）…","category":"央国企","batch":" 第二批待发布…","deadline":"","deadlineNote":"10-09 9:00至10-15 16:00报名、10-25 9:00-11:30笔试；山东农业大学走第二批——定向选调（部分高校及相关专业，见报考手册）或常规选调（全国普通高校，须学生干部中的中共党员，录用后到乡镇/街道），笔试为行测+申论，第二批职位计划与报名时间另行通知（参考往年11月）。以灯塔-党建在线为准…","source":"山东省政府网/灯塔-党建在线（10-08发布）","publishedAt":"2026-10-08","url":"http://www.shandong.gov.cn/art/2026/10/8/art_94237_10366994.html"},{"id":"adbc-2027","org":"中国农业发展银行","position":"会计等，公共管理可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-11","deadlineNote":"下统一笔试（综合测评含性格测试）；三大政策性银行之一，总行及各省级分行…","source":"学就业网转载）…","publishedAt":"2026-09-15","url":"https://www.adbc.com.cn"},{"id":"wh-plan-2027","org":"武汉市规划研究院","position":"规划学/地理学/交通运输工程）…","category":"央国企","batch":"正式批","deadline":"2026-09-24","deadlineNote":"位，硕士研究生及以上；武汉市2027年选聘生管培生统一招聘（武汉市委组织部/人社局/国资委联合发布）；面试初步定于11月14-16日；报名入口 wuhan.nomax.vip/tip…","source":"武汉市人力资源和社会保障局（高校人才网转载）","publishedAt":"2026-09-15","url":"https://www.whzg.gov.cn"},{"id":"eximbank-2027","org":"中国进出口银行","position":"管理类等，公共管理可投）…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":".29-11.12，笔试12.6）；2027年度预计2026年10月下旬发布公告（预测，以官网为准）；报名入口 zhaopin.eximbank.gov.cn…","source":"中国进出口银行官网 eximbank.gov.cn","publishedAt":"","url":"http://www.eximbank.gov.cn/info/notice/recruit/index.html"},{"id":"sadi-2027","org":"四川省建筑设计研究院有限公司（SADI）","position":"相关专业，成都；另含工程管理/职能类/数字规划工程师）…","category":"央国企","batch":"正式批","deadline":"2027-06-30","deadlineNote":"院有限公司提供，专业要求土地资源管理/国土测绘与规划；简历接收邮箱61981369@qq.com，邮件主题'2027校招+姓名+联系方式+学校+专业+应聘岗位'；四川省属50家国有重要骨干企业之一…","source":"北京建筑大学就业网转载）…","publishedAt":"2026-09-14","url":"http://job.bjfu.edu.cn/frontpage/mobile/dist/index.html#/recruitmentinfoForm?positionDetailId=127d21652726428aa338d07053ba9650"},{"id":"ippr-2027","org":"中国中元国际工程有限公司","position":" 机械物流设计等，北京；央企·国机集团子公司）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"）；前身机械工业部设计研究总院，集科技研发/工程咨询/工程设计/工程总承包于一体；往年校招9月中旬启动、11月中旬截止（预测，以官网为准）；报名入口 ippr.com.cn/rczy/cpyc…","source":"中国中元官网（应届生求职网发布）","publishedAt":"2026-09-17","url":"http://www.ippr.com.cn/rczy/cpyc/"},{"id":"gzpi-2027","org":"广州市城市规划勘测设计研究院（GZPI）","position":"/城乡规划；测绘地理信息类含土地资源管理；工作地点广州/北京/上海/武汉/深圳等）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"更新），规划设计类明确含土地资源管理/自然资源专业；具有城乡规划甲级/土地规划甲级/测绘甲级资质；往年校招9月起网申、11月中旬截止（预测，以官网为准）；招聘官网 GZPI.hotjob.cn…","source":"（多所高校就业网转载）…","publishedAt":"2026-09-09","url":"https://sc.hotjob.cn/wt/GZPI/mobweb/v8/position/list?brandCode=1&recruitType=1&request_locale=zh_CN"},{"id":"cgb-2027","org":"广发银行","position":"支机构营销/职能岗，多数职位专业不限，管理学可投）…","category":"央国企","batch":"正式批","deadline":"2026-11-15","deadlineNote":"人，101个工作城市；多数职位专业不限，重点招经济学/法学/管理学等；网申关注广发银行招聘官微公众号…","source":"学就业网转载）…","publishedAt":"2026-09-09","url":"https://m.yingjiesheng.com/job-008-085-560.html"},{"id":"gdupi-2027","org":"广东省城乡规划设计研究院科技集团股份有限公司（广规科技/粤规院）","position":"规划/资源环境与城乡规划管理；另含城乡规划/人文地理/生态学等，广州）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"具备城乡规划编制/建筑/市政/风景园林/测绘/工程咨询6项甲级资质；往年校招网申约至12月底（预测，以官网为准）；网申通道 campus.51job.com/gdupi…","source":"v.cn）…","publishedAt":"2026-09-18","url":"https://www.yingjiesheng.com/2021_industry_wmj8c54v45.html"},{"id":"crtc-2027","org":"中国融通资产管理集团有限公司（中国融通集团）","position":"专业；工作地点含济南等全国多地）…","category":"央国企","batch":"正式批","deadline":"2026-10-30","deadlineNote":"（央企），资产项目遍布31省区市；需求专业含工学/经济学/农学/法学/理学/文学/管理学等；网申入口 job.crtc-hr.com/sld/campus…","source":"中国融通集团官网（国务院国资委/高校人才网转载）","publishedAt":"2026-09-12","url":"http://zjgl.crtamg.com.cn/rlzy/rczp/202609/t20260912_5752.html"},{"id":"spdb-2027","org":"浦发银行","position":"行业务储备生/营销方向；济南分行含管理培训生/业务储备生，覆盖济南/菏泽/德州/聊城/济宁/淄博/潍坊/临沂/泰安）…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"2家机构各2个岗位；原则上不限专业，多学科复合背景优先；公共管理/管理学可报…","source":"浦发银行招聘官网 job.spdb.com.cn","publishedAt":"2026-09-03","url":"https://job.spdb.com.cn"},{"id":"cmb-2027","org":"招商银行","position":"销/运营支持/职能类；AI面试纳入标准流程）…","category":"央国企","batch":"正式批","deadline":"2026-10-10","deadlineNote":"仅一次机会，全行通用）；本科CET4 425+/硕士CET6 425+；公共管理/管理学可报职能/营销类岗位…","source":"com…","publishedAt":"2026-08-28","url":"https://career.cmbchina.com"},{"id":"citicbank-2027","org":"中信银行","position":"理类/法学类可投；济南/青岛/烟台均有岗位）…","category":"央国企","batch":"正式批","deadline":"2026-10-09","deadlineNote":"2个机构各2个岗位；需求专业含经济学/管理学/法学等；公共管理可报…","source":"中信银行招聘官网 job.citicbank.com","publishedAt":"2026-08-31","url":"https://job.citicbank.com"},{"id":"cmbc-2027","org":"中国民生银行","position":"职能类，管理学可投；济南/青岛有岗位）…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"管理/管理学可报职能/业务管理类岗位…","source":"cn…","publishedAt":"2026-09-04","url":"https://career.cmbc.com.cn"},{"id":"cbhb-2027","org":"渤海银行","position":"岛分行、烟台二级分行等；金融/管理/市场营销类可投）…","category":"央国企","batch":"正式批","deadline":"2026-10-18","deadlineNote":"2月；济南分行/青岛分行均招培训见习生；烟台/淄博/济宁/德州二级分行招公司业务/零售客户经理（管理类优先）；全国性股份制商业银行…","source":"渤海银行校招简章（多所高校就业网转载）","publishedAt":"2026-09-15","url":"https://campus.51job.com/bhyh2027"},{"id":"czbank-2027","org":"浙商银行","position":"济南分行、青岛分行；不设专业限制，500人）…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"3日内完成；笔试面试10-11月；不设专业限制，欢迎各类专业背景；济南分行/青岛分行均在省外20家分行之列…","source":"浙商银行招聘官网 zp.czbank.com.cn","publishedAt":"2026-09-12","url":"https://zp.czbank.com.cn"},{"id":"weifang-bank-2027","org":"潍坊银行","position":"学类/法学类等；营业网点业务岗：专业不限，经管类优先；工作地点含潍坊/青岛/聊城/滨州/烟台/临沂）…","category":"央国企","batch":"正式批","deadline":"2026-11-10","deadlineNote":"试、11月下旬-12月面试；网点业务岗本科可报专业不限，管培生/金融科技岗需2027届硕士；报名入口 wfbank2027.zhaopin.com…","source":"潍坊银行2027校招简章（齐鲁网/大众网）","publishedAt":"2026-09-17","url":"https://wfbank2027.zhaopin.com"},{"id":"hubei-plan-2027","org":"湖北省规划设计研究总院","position":"利工程等专业，武汉；另设城乡规划设计岗/投融资咨询岗）…","category":"央国企","batch":"正式批","deadline":"2026-11-16","deadlineNote":"毕业生，硕士及以上，每人限投1岗；隶属中南建筑设计院（CSADI）规划设计事业部，全国首批甲级规划设计院；投递邮箱 ghzy_hr@csadi.cn…","source":"湖北省规划设计研究总院27秋招（超级简历/官网）","publishedAt":"2026-09-19","url":"https://www.hbsghy.com/JobPosting_list.html"},{"id":"qilu-bank-2027","org":"齐鲁银行","position":"工作地点含济南/青岛/烟台/临沂/潍坊/济宁等山东全省及天津）…","category":"央国企","batch":"正式批","deadline":"2026-10-15","deadlineNote":"ank2027；综合柜员/客户经理岗，经管类可投；齐鲁银行为总部济南的山东城商行（已上市）…","source":"齐鲁银行官网 qlbchina.com","publishedAt":"2026-09-17","url":"https://xy.liepin.com/qlbank2027"},{"id":"pingan-jn-2027","org":"平安银行济南分行","position":"工作地点含济南/临沂/淄博/济宁/泰安/潍坊/东营）…","category":"央国企","batch":"正式批","deadline":"2026-11-06","deadlineNote":"试8-11月滚动进行；报名入口平安银行校园招聘官网 campus.pingan.com…","source":"平安银行校园招聘（多所高校就业网转载）","publishedAt":"2026-08-14","url":"https://campus.pingan.com"},{"id":"china-life-2027","org":"中国人寿保险（股份公司）","position":"职能类；公共管理/经管类可投）…","category":"央国企","batch":"正式批","deadline":"2026-11-15","deadlineNote":"议尽早投递；每人可填3个志愿…","source":"（人才招聘·校园招聘）…","publishedAt":"2026-09-09","url":"https://www.chinalife.com.cn/chinalife/"},{"id":"sd-ghy-2027","org":"山东省城乡规划设计研究院有限公司","position":"济南，硕士及以上）…","category":"央国企","batch":"正式批（滚动招聘）","deadline":"","deadlineNote":"邮箱投递简历+作品集，招满即止；国家甲级城市规划/建筑设计院，工作地点济南","source":"就业网转载）…","publishedAt":"2026-09-09","url":"https://www.sdghy.com/"},{"id":"sinotruk-2027","org":"中国重汽集团（中国重型汽车集团有限公司）","position":"人力资源 / 党群 / 行政 / 品牌传播 / 金融投资 / 生产管理，济南）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"24万/年；专业以人力资源管理类/法学类/财务类为主，公共管理类可报行政、党群、综合管理方向…","source":".com（多所高校就业网转载）…","publishedAt":"2026-09-19","url":"https://zhaopin.sinotruk.com:8009/"},{"id":"wf-ghy-2027","org":"潍坊市规划设计研究院","position":"规划，潍坊，硕士，招约2人）…","category":"央国企","batch":"发布，参考2026年岗位）…","deadline":"","deadlineNote":"技术/土地规划与利用），招满即止；2027届岗位预计2026年底至2027年发布（预测，以官网为准）。隶属潍坊市自然资源和规划局，城乡规划编制甲级资质…","source":"oin（高校人才网转载）…","publishedAt":"","url":"https://www.wfsghy.com/join"},{"id":"zdpg-2027","org":"广东中地土地房地产评估与规划设计有限公司（中地顾问）","position":"估、耕地服务、国土空间规划、用地报批、土地整治；工作地广州/湛江/云浮/清远/江门/佛山/茂名）…","category":"其他","batch":"正式批","deadline":"","deadlineNote":"、招满即止；土地资源管理/自然资源/城乡规划/地理类硕士对口，需会 ArcGIS 等…","source":".cn）…","publishedAt":"2026-09-23","url":"https://jy.gzhu.edu.cn/web/Index/jobs-brief-detail?id=SPUXSW9"},{"id":"tjupdi-2027","org":"上海同济城市规划设计研究院有限公司（TJUPDI）","position":"全国首批城乡规划编制甲级资质，2027届硕士及以上）…","category":"央国企","batch":"正式批","deadline":"2026-11-08","deadlineNote":"下旬邮件通知；明确招收土地资源管理（上海）、城乡规划/城市规划设计、资源环境生态类，需2027届硕士及以上，有规划院实习者优先…","source":"t/campus…","publishedAt":"2026-09-28","url":"https://www.tjupdi.com/recruit/campus"},{"id":"cib-2027","org":"兴业银行股份有限公司","position":"支持、职能支持岗；公共管理可报行政/人力/综合营销岗；含济南/山东分行）…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"7-08-31前取得毕业证学位证；总行/管培生硕士及以上、分行常规岗本科及以上；本科CET4 425+/硕士CET6 425+；公共管理类可报行政/人力/综合营销岗；笔试面试时间暂未公布，以兴业银行招聘官网/公众号为准…","source":"nhangzhaopin.com）…","publishedAt":"2026-09-20","url":"https://www.cib.com.cn/"},{"id":"njcb-2027","org":"南京银行股份有限公司","position":" 职能管理岗；除科技/法律定向岗外专业不限，含济南分行）…","category":"央国企","batch":"正式批","deadline":"2026-10-11","deadlineNote":"专业不限，欢迎管理学等各类专业；南银理财/南银法巴消费金融另招金融科技与职能管理岗；报名入口 job.njcb.com.cn…","source":"多所高校就业网转载）…","publishedAt":"2026-09-08","url":"https://job.njcb.com.cn"},{"id":"bjbank-2027","org":"北京银行股份有限公司","position":"支持/综合管理/会计核算/数据分析；济南分行有岗，不限专业）…","category":"央国企","batch":"正式批","deadline":"2026-10-15","deadlineNote":"管理/运营支持/客户经理方向公共管理可报；科技英才岗为信息技术方向；报名入口 bankofbeijing.zhiye.com 校招…","source":"iye.com（多所高校就业网/济南分行公告转载）…","publishedAt":"2026-09-28","url":"https://bankofbeijing.zhiye.com"},{"id":"nanning-survey-2027","org":"南宁市勘测设计院集团有限公司","position":"划/土地资源管理/土地利用与规划/工程管理；另招综合类财务/法律等）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"skcyrjk@163.com；南宁市属国有勘测设计院，工作地点南宁；土地资源管理专业直接对口…","source":"温大就业网转载简章）…","publishedAt":"2026-09-14","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6210494"},{"id":"cgdg-2027","org":"中国绿发投资集团有限公司","position":"/行政管理/法学/财务金融等，全国岗含山东；另有能源科技/智能化/文旅运营类）…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"6/2027届本科及以上（未缴社保择业期可报），以绿发招聘官网 zhaopin.cgdg.com 为准…","source":"聘官网…","publishedAt":"2026-10-08","url":"https://zhaopin.cgdg.com"},{"id":"minmetals-2027","org":"中国五矿集团有限公司（含北京五矿有色金属、五矿矿业/鲁中矿业等子公司）","position":"等，需求专业含公共管理学；山东鲁中矿业在济南莱芜；另有矿产/冶金/地质/财经类）…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"为准）；北京五矿有色金属业绩管理岗等明确招公共管理学；山东骨干子企业鲁中矿业在济南莱芜…","source":"s.com.cn（高校人才网/高校就业网转载）…","publishedAt":"2026-09-16","url":"https://zhaopin.minmetals.com.cn"},{"id":"poly-2027","org":"中国保利集团有限公司（含保利发展控股等子公司）","position":"力/综合管理；保利发展控股党群人力合伙人明确含公共事业管理/劳动与社会保障/行政管理，公共管理对口）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"；保利发展控股党群人力/综合管理管培明确含公共事业管理/劳动与社会保障/行政管理（公共管理对口）；网申招满即止，投递 campus.51job.com/ploy（以官网为准）…","source":"南开大学就业网 / 保利集团招聘平台","publishedAt":"2026-09-29","url":"http://campus.51job.com/ploy"},{"id":"sinopharm-2027","org":"中国医药集团有限公司（国药集团，含国药控股山东等）","position":"岗位要求管理学全类含公共管理；国药控股山东有党委组织部/人力资源岗）…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"共管理），国药控股山东有党委组织部专员岗；网申招满即止，投递 sinopharm2027.iguopin.com（以官网为准）…","source":"国药集团招聘平台（国聘 / 高校人才网）","publishedAt":"2026-09-18","url":"https://sinopharm2027.iguopin.com/notice"}],"generatedAt":"2026-10-10T00:37:45.376Z"};
+/* ============ 内嵌信息池数据（单文件自包含：无 recruit-seed.js 也可直接用） ============ */
+window.__RECRUIT_DATA__ = {"meta":{"title":"2027届秋招信息池","updatedAt":"2026-10-11","owner":"刘峻豪","scope":"仅面向2027届毕业生；仅保留校招/秋招公告（含银行等公共管理可投岗位，已移除专业不对口单位）","sources":["国务院国资委人事招聘专栏 http://www.sasac.gov.cn","中国公共招聘网 http://job.mohrss.gov.cn","国聘网 https://www.iguopin.com","国家大学生就业服务平台(24365) https://www.ncss.cn","各集团招聘官网 / 大厂校招官网","应届生求职网 https://www.yingjiesheng.com","高校人才网 https://www.gaoxiaojob.com","国家大学生就业服务平台(山东高校毕业生就业信息网) https://gxjy.sdei.edu.cn","山东省人事考试信息网(山东人事考试网) http://hrss.shandong.gov.cn/rsks/","江苏人事考试网 http://jshrss.jiangsu.gov.cn/col/col57253/index.html","山东省委组织部(灯塔-党建在线) https://www.dtdjzx.gov.cn","山东事业单位招聘网(事业单位公告以各市县人社局官网为准)","重点高校就业网(各高校就业信息网)","临沂市人社局官网 http://rsj.linyi.gov.cn","中国公共招聘网·中央企业招聘应届高校毕业生信息公开专栏 http://www.job.mohrss.gov.cn/qyzp/","济南市国资委官网 jngzw.jinan.gov.cn","青岛人才赋能中心/青岛国企招聘 fw.rc.qingdao.gov.cn","山东省国资委官网（省属企业招聘公告）","临沂12345政务公开·国企招聘专栏 12345.linyi.gov.cn","各地市人社局官网（事业单位招聘公告）"],"note":"口径：仅2027届校招/秋招（已剔除社招与不对口单位）；deadline空=官方未公布（招满即止/待公告），未编造；带“预测”为往年节奏，以官网为准。10-11新增：中国人保、中信保、中粮、中国太平（均含公共管理对口的综合/行政/职能岗）。待公告条目发布后自动转可投。更新于2026-10-11。"},"records":[{"id":"gz-transport-plan-2027","org":"广州市交通规划研究院","position":"国土空间与地理科学类（城乡规划 / 土地资源…","category":"央国企","batch":"正式批","deadline":"2026-10-16","deadlineNote":"网申至2026-10-16；含国土空间与地理科学类（土地资源…","source":"2027秋招公告（via 超级简历）","publishedAt":"2026-08-19","url":"https://www.chaojijianli.com/xiaozhao/guangzhou-transport-planning-institute-2027-fall-12570-cd4901/"},{"id":"htgh-2027","org":"航天规划设计集团","position":"2027届规划设计岗（城乡规划与管理类，北京…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"国聘网在招，招满即止；另有电气智能化设计、测绘等岗位","source":"国聘网 iguopin.com","publishedAt":"2026-09-02","url":"https://www.iguopin.com/company?id=10685386929595437"},{"id":"zz-plan-2027","org":"郑州市规划勘测设计研究院","position":"城乡规划 / 测绘 / 市政工程等（地方国企…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届秋招宣讲会已启动，招满即止（以官网公告为准）","source":"应届生求职网宣讲会","publishedAt":"2026-08-12","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6034389"},{"id":"mnr-2027","org":"自然资源部所属事业单位","position":"土地资源管理 / 国土空间规划 / 测绘 /…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"2026年度分4批发布（1-7月），2027年度预计2026…","source":"自然资源部所属企事业单位公开招聘报名平台 s…","publishedAt":"","url":"https://www.sydwgkzp.cn/mnr/index.html"},{"id":"sd-dnr-2027","org":"山东省自然资源厅所属事业单位","position":"国土空间规划 / 土地资源管理 / 测绘 /…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"往年3月发布（2026年报名3.4-3.11），2027年度…","source":"山东省自然资源厅 dnr.shandong.…","publishedAt":"","url":"http://dnr.shandong.gov.cn/"},{"id":"sdtd-group-2027","org":"山东土地集团（山东省土地发展集团有限公司）","position":"权属公司招聘（土地整治与经营 / 城乡融合 …","category":"央国企","batch":"2027届校招（未发布）","deadline":"","deadlineNote":"每年秋季发布下一年度校招（2025届公告2024年12月发布…","source":"山东土地集团官网 sdtdfz.com","publishedAt":"","url":"https://www.sdtdfz.com/index/model?link=rlzy"},{"id":"lyct-group-2027","org":"临沂城市建设投资集团有限公司（临沂城投）","position":"集团及权属公司招聘（城投建设 / 城市职业学…","category":"央国企","batch":"校招（未发布）","deadline":"","deadlineNote":"招聘公告主要经临沂市国资委官网发布；2026年有就业见习人员…","source":"临沂市国资委 lysgzw.linyi.go…","publishedAt":"","url":"http://lysgzw.linyi.gov.cn/listnew.jsp?urltype=tree.TreeTempUrl&wbtreeid=1040"},{"id":"sc-plan-institute-2027","org":"四川省国土空间规划研究院","position":"土地资源类（含土地资源管理、地图学与地理信息…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届秋招宣讲会已启动（2026-08-06）；土地资源…","source":"应届生求职网宣讲会","publishedAt":"2026-08-06","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_5734389"},{"id":"crec-design-2027","org":"中铁工程设计咨询集团（中铁设计）","position":"工程规划 / 勘察 / 设计 / 咨询 / …","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国中铁子公司；2027年高校毕业生招聘宣讲会已启动，…","source":"中铁设计招聘宣讲（云校招平台）","publishedAt":"2026-09-14","url":"https://51uns.bysjy.com.cn/Lecture/Details?id=708889&schoolcode=10710"},{"id":"powerchina-bj-2027","org":"中国电建集团北京勘测设计研究院","position":"水利水电 / 规划 / 勘察 / 设计（20…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国电建子公司；2027届秋季校园招聘公告2026-0…","source":"高校就业信息网转载公告","publishedAt":"2026-09-09","url":"https://jy.cumtb.edu.cn/Zhaopin/xiaozhao.html?id=05bcd643-c929-bc85-2d91-07bf6a277e7b&type=1"},{"id":"cccc-rail-design-2027","org":"中交铁道设计研究总院","position":"设计咨询岗 / 工程技术岗（2027届校招）","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国交建子公司；2027届校招中交轨道事业部设计咨询岗…","source":"中国交建招聘平台 ccccltd.zhiye…","publishedAt":"2026-09-13","url":"https://ccccltd.zhiye.com/custom/xzzw?c1=253&hideMenu=1"},{"id":"avic-survey-2027","org":"中航勘察设计研究院","position":"生态治理工程师（资源与环境类）/ 测绘工程师","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国航空工业集团子公司；2027年校园招聘在招，硕士，…","source":"国聘网 iguopin.com","publishedAt":"2026-09-02","url":"https://www.iguopin.com/company?id=10685311330019054"},{"id":"cccc-urban-invest-2027","org":"中交城市投资控股","position":"产业设计管理岗 / 产业投资拓展岗（2027…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国交建子公司；2027届校招在招（产业投资拓展类公共…","source":"国聘网 iguopin.com","publishedAt":"2026-09-10","url":"https://www.iguopin.com/company?id=10685328323227156"},{"id":"cscec-zhidi-2027","org":"中建智地置业&中建智城","position":"投资 / 设计 / 工程 / 管理类（202…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国建筑子公司；2027届校园招聘已发布（2026-0…","source":"中建招聘 recruit.cscec.com…","publishedAt":"2026-09-11","url":"https://recruit.cscec.com/recruit#/company?contract_unit=32043003&company_id=1873"},{"id":"ceec-2027","org":"中国能建（含所属设计院）","position":"2027届全球校招（规划设计 / 工程 / …","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企；2027届全球校招2026-09-10正式启动，下属电…","source":"中国公共招聘网·央企招聘信息公开专栏","publishedAt":"2026-09-10","url":"http://www.job.mohrss.gov.cn/qyzp/"},{"id":"cmg-2027","org":"招商局集团","position":"2027届校园招聘（综合管理 / 职能类可投…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企；2027届校园招聘2026-09-10启动，业务覆盖交…","source":"中国公共招聘网·央企招聘信息公开专栏","publishedAt":"2026-09-10","url":"http://www.job.mohrss.gov.cn/qyzp/"},{"id":"sd-development-2027","org":"山东发展集团（济南）","position":"2027届校园招聘（138人，含产业投资 /…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"省属国企；面向2027届、2026届及择业期高校毕业生计划招…","source":"济南市人社局 jnhrss.jinan.go…","publishedAt":"2026-07-18","url":"https://jnhrss.jinan.gov.cn/col/col18309/art/2026/art_e527c2fda8a244eebb49a3ff1c540478.html"},{"id":"jinan-chengtou-2027","org":"济南城投集团","position":"集团及权属公司招聘（城市投资 / 建设开发 …","category":"央国企","batch":"校招（未发布）","deadline":"","deadlineNote":"济南市属国企集中招聘渠道已加入；济南城投2027届校招以市国…","source":"济南市政府·市属国企集中招聘专栏 jinan…","publishedAt":"","url":"https://www.jinan.gov.cn/zt/2025nzt/yhyshj/rcbf/qzzp/"},{"id":"cscec8b-2027","org":"中建八局发展建设公司（青岛）","position":"2027届秋招（工程技术 / 设计 / 管理…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"央企·中国建筑子公司，总部青岛黄岛；2027届秋招公告202…","source":"中建八局发展建设公司（via 高校就业网）","publishedAt":"2026-08-20","url":"https://job.lzu.edu.cn/html/22/article/2026/91000.html"},{"id":"qingdao-plan-2027","org":"青岛市城市规划设计研究院","position":"国土空间 / 城乡规划 / 设计研究岗","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"公益二类事业单位（青岛市自然资源和规划局主管）；2025年1…","source":"青岛政务网 qingdao.gov.cn","publishedAt":"","url":"http://www.qingdao.gov.cn/zwgk/xxgk/zygh/gkml/rsrm/202511/t20251106_10357309.shtml"},{"id":"powerchina-sd3-2027","org":"山东电力建设第三工程公司（青岛）","position":"2027届秋招（工程技术 / 管理类）","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"央企·中国电建子公司，总部青岛崂山；2026届宣讲会3月举办…","source":"应届生求职网宣讲会","publishedAt":"","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6243505"},{"id":"cq-geores-2027","org":"重庆地质矿产研究院","position":"土地整治设计 / 国土空间规划用地技术 / …","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"重庆市规划和自然资源局直属科研事业单位；土地资源管理硕士直接…","source":"国家大学生就业服务平台 ncss.cn","publishedAt":"","url":"https://www.ncss.cn/student/jobs/Pc1j1XMZ5FhyFeLMd326ye/detail.html"},{"id":"ly-luoopen-2027","org":"临沂罗开控股集团（罗庄区属国企）","position":"产业投资 / 产业园开发运营 / 土地熟化 …","category":"央国企","batch":"2027届校招（未发布）","deadline":"","deadlineNote":"区属国企，主营产业投资、土地熟化和城建开发（与土地管理相关）…","source":"临沂12345政务公开 / 罗庄区政府","publishedAt":"","url":"https://12345.linyi.gov.cn/gov/app/share/YS00MDktMTAwMTYyMjkw.html"},{"id":"ly-lanling-mining-2027","org":"兰陵新思想产业投资（兰陵县国企）","position":"绿色矿山 / 砂石资源整合 / 生态治理 /…","category":"央国企","batch":"2027届校招（未发布）","deadline":"","deadlineNote":"县属国企，规模化整合县域砂石资源、生态治理、产业链投资（自然…","source":"兰陵县政府 lanling.gov.cn /…","publishedAt":"","url":"https://www.lanling.gov.cn/info/1039/1478402.htm"},{"id":"icbc-2027","org":"中国工商银行","position":"2027年度校园招聘（客户经理 / 管理培训…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"网上报名9.4-10.8，笔试预计10月下旬；客户经理/管培…","source":"中国公共招聘网 job.mohrss.gov…","publishedAt":"2026-09-04","url":"https://job.icbc.com.cn"},{"id":"boc-2027","org":"中国银行","position":"2027全球校园招聘（总行及境内分行，综合管…","category":"央国企","batch":"正式批","deadline":"2026-10-09","deadlineNote":"报名9.3-10.9 24:00，10月中下旬笔试；每人最多…","source":"中国银行人才招聘 campus.chinah…","publishedAt":"2026-09-03","url":"https://campus.chinahr.com/pages/2027-boc"},{"id":"abchina-2027","org":"中国农业银行","position":"2027年度校园招聘（总行及境内分行，客户经…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"报名即日起-10.8 24:00，笔试初定10月下旬或11月…","source":"中国公共招聘网 job.mohrss.gov…","publishedAt":"2026-09-04","url":"https://career.abchina.com.cn"},{"id":"ccb-2027","org":"中国建设银行","position":"2027年度校园招聘（管理培训生 / 客户经…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"报名9.4-10.8 24:00，笔试10月；总部硕士及以上…","source":"建设银行官网 job2.ccb.com / …","publishedAt":"2026-09-04","url":"https://job2.ccb.com/cn/job/announcement.html?annoId=20260903163254718082"},{"id":"bocom-2027","org":"交通银行","position":"2027年度校园招聘（客户经理 / 管理培训…","category":"央国企","batch":"正式批","deadline":"2026-10-18","deadlineNote":"网申9.14-10.18截止；山东省分行招聘分行储备生/科技…","source":"交通银行人才招聘 job.bankcomm.…","publishedAt":"2026-09-14","url":"https://job.bankcomm.com"},{"id":"psbc-2027","org":"中国邮政储蓄银行","position":"2027年度校园招聘（U培生·经营管理方向 …","category":"央国企","batch":"正式批","deadline":"2026-10-07","deadlineNote":"报名即日起-10.7 24:00，笔试10月下旬；U培生经营…","source":"邮储银行官网 psbc.com","publishedAt":"2026-09-07","url":"https://www.psbc.com/cn/gyyc/rczp/xyzp/202609/t20260907_460394.html"},{"id":"cdb-2027","org":"国家开发银行","position":"2027校园招聘（总行及境内分行，信贷管理 …","category":"央国企","batch":"正式批","deadline":"2026-10-07","deadlineNote":"报名9.12 12:00-10.7 24:00，笔试11月初…","source":"国家开发银行官网 cdb2027.zhaop…","publishedAt":"2026-09-12","url":"https://cdb2027.zhaopin.com"},{"id":"chinapost-2027","org":"中国邮政集团（含山东邮政）","position":"2027年度联合校园招聘（邮政业务 / 金融…","category":"央国企","batch":"正式批","deadline":"2026-10-31","deadlineNote":"简历接收截止2026-10-31（邮储银行10.7、中邮保险…","source":"中国邮政集团官网 chinapost.com…","publishedAt":"2026-09-07","url":"https://www.chinapost.com.cn/cn/report/2609/1176-1.html"},{"id":"guoxin-2027","org":"中国国新控股","position":"2027届校园招聘（综合职能类：人力资源 /…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2026-09-08发布，招满即止（以官网为准）；工作地点北…","source":"中国国新官网（国资委专栏/高校就业网转载）","publishedAt":"2026-09-08","url":"https://scdc.jnu.edu.cn/campus/view/id/1036945"},{"id":"coamc-2027","org":"中国东方资产管理股份有限公司","position":"总部管培生 / 各分公司业务岗（含山东省分公…","category":"央国企","batch":"正式批","deadline":"2026-09-18","deadlineNote":"简历投递即日起至2026-09-18；中央金融企业（四大AM…","source":"中国东方资产管理官网（高校人才网转载）","publishedAt":"2026-08-20","url":"https://coamc.zhiye.com/campus"},{"id":"mot-2027","org":"交通运输部所属事业单位","position":"2027年度第一批统一公开招聘（11家直属单…","category":"央国企","batch":"正式批","deadline":"2026-09-21","deadlineNote":"报名9.15 9:00-9.21 18:00，笔试暂定9.2…","source":"交通运输部官网 xxgk.mot.gov.c…","publishedAt":"2026-09-14","url":"https://rccp.jtzyzg.org.cn"},{"id":"sd-energy-2027","org":"山东能源集团","position":"2027年高校毕业生校园招聘（经营管理类等，…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2026-09-10正式开启，各岗位招满后关闭；招聘专业含经…","source":"山东能源集团官网/山东省国资委（选择山东）","publishedAt":"2026-09-10","url":"https://zhaopin.shandong-energy.com/recruit"},{"id":"griot-2027","org":"中国有研科技集团","position":"2027届校园招聘（财务专员/销售经理/企管…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2026-09-14发布，招满即止；重点需求专业含管理学；工…","source":"中国有研科技集团官网（高校人才网/高校就业网…","publishedAt":"2026-09-14","url":"https://www.gaoxiaojob.com/announcement/detail/430797.html"},{"id":"sd-xds-2027","org":"山东省选调生（省委组织部）","position":"山东省2027年度选拔录用选调生（共1562…","category":"央国企","batch":"第一批定向已开 / 第二批待发布","deadline":"","deadlineNote":"公告10-08发布共1562名。第一批定向（21所高校，不含…","source":"山东省政府网/灯塔-党建在线（10-08发布…","publishedAt":"2026-10-08","url":"http://www.shandong.gov.cn/art/2026/10/8/art_94237_10366994.html"},{"id":"adbc-2027","org":"中国农业发展银行","position":"2027年度校园招聘（信贷管理 / 综合管理…","category":"央国企","batch":"正式批","deadline":"2026-10-11","deadlineNote":"网上报名2026年9月15日至10月11日24时；笔试202…","source":"中国农业发展银行官网（厦门大学/中科大/贵州…","publishedAt":"2026-09-15","url":"https://www.adbc.com.cn"},{"id":"wh-plan-2027","org":"武汉市规划研究院","position":"2027年选聘生（事业单位，需求专业含公共管…","category":"央国企","batch":"正式批","deadline":"2026-09-24","deadlineNote":"网上报名2026年9月12日9:00至9月24日16:00；…","source":"武汉市人力资源和社会保障局（高校人才网转载）","publishedAt":"2026-09-15","url":"https://www.whzg.gov.cn"},{"id":"eximbank-2027","org":"中国进出口银行","position":"2027年度校园招聘（总行及境内分行，经济金…","category":"央国企","batch":"未发布","deadline":"","deadlineNote":"三大政策性银行之一；2026年度校招公告2025-10-29…","source":"中国进出口银行官网 eximbank.gov…","publishedAt":"","url":"http://www.eximbank.gov.cn/info/notice/recruit/index.html"},{"id":"sadi-2027","org":"四川省建筑设计研究院有限公司（SADI）","position":"2027届校园招聘（国土整治技术岗：土地资源…","category":"央国企","batch":"正式批","deadline":"2027-06-30","deadlineNote":"2027届校招2026-09-14发布；国土整治技术岗由四川…","source":"四川省建筑设计研究院官网（北京林业大学/大连…","publishedAt":"2026-09-14","url":"http://job.bjfu.edu.cn/frontpage/mobile/dist/index.html#/recruitmentinfoForm?positionDetailId=127d21652726428aa338d07053ba9650"},{"id":"ippr-2027","org":"中国中元国际工程有限公司","position":"2027届校园招聘（城市规划设计 / 环境艺…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届校招2026-09-17启动（应届生求职网发布城市…","source":"中国中元官网（应届生求职网发布）","publishedAt":"2026-09-17","url":"http://www.ippr.com.cn/rczy/cpyc/"},{"id":"gzpi-2027","org":"广州市城市规划勘测设计研究院（GZPI）","position":"2027届校园招聘（规划设计类含土地资源管理…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027应届招聘已在GZPI.hotjob.cn上线（202…","source":"广州市规划院招聘官网 GZPI.hotjob…","publishedAt":"2026-09-09","url":"https://sc.hotjob.cn/wt/GZPI/mobweb/v8/position/list?brandCode=1&recruitType=1&request_locale=zh_CN"},{"id":"cgb-2027","org":"广发银行","position":"2027年度校园招聘（总行综合管理/业务管理…","category":"央国企","batch":"正式批","deadline":"2026-11-15","deadlineNote":"总行2026-10-15截止，分支机构2026-11-15截…","source":"广发银行招聘官微（大连理工/清华/陕西师范/…","publishedAt":"2026-09-09","url":"https://m.yingjiesheng.com/job-008-085-560.html"},{"id":"gdupi-2027","org":"广东省城乡规划设计研究院科技集团股份有限公司（广规科技/粤规院）","position":"2027届校园招聘（土地资源管理岗：土地资源…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2027届校招2026-09-18在应届生求职网新发布；始创…","source":"应届生求职网（广东省国资委官网 gzw.gd…","publishedAt":"2026-09-18","url":"https://www.yingjiesheng.com/2021_industry_wmj8c54v45.html"},{"id":"crtc-2027","org":"中国融通资产管理集团有限公司（中国融通集团）","position":"2027届秋季校园招聘（综合管理/职能类岗位…","category":"央国企","batch":"正式批","deadline":"2026-10-30","deadlineNote":"网申即日起至2026-10-30 17:00；中央管理的商业…","source":"中国融通集团官网（国务院国资委/高校人才网转…","publishedAt":"2026-09-12","url":"http://zjgl.crtamg.com.cn/rlzy/rczp/202609/t20260912_5752.html"},{"id":"spdb-2027","org":"浦发银行","position":"2027年度校园招聘（总行管培生/业务储备生…","category":"央国企","batch":"正式批","deadline":"2026-10-08","deadlineNote":"网申9.3 10:00-10.8 18:00；笔试10月中下…","source":"浦发银行招聘官网 job.spdb.com.…","publishedAt":"2026-09-03","url":"https://job.spdb.com.cn"},{"id":"cmb-2027","org":"招商银行","position":"2027校园招聘（总行管培生/职能类 + 各…","category":"央国企","batch":"正式批","deadline":"2026-10-10","deadlineNote":"网申即日起-10.10 23:59；每人最多投递5家分行；流…","source":"招商银行招聘官网 career.cmbchi…","publishedAt":"2026-08-28","url":"https://career.cmbchina.com"},{"id":"citicbank-2027","org":"中信银行","position":"2027校园招聘（管理培训生/客户经理/柜员…","category":"央国企","batch":"正式批","deadline":"2026-10-09","deadlineNote":"网申8.31启动，简历接收暂定10.9截止（以官网公告为准）…","source":"中信银行招聘官网 job.citicbank…","publishedAt":"2026-08-31","url":"https://job.citicbank.com"},{"id":"cmbc-2027","org":"中国民生银行","position":"2027校园招聘（总行/分行/子公司，管培生…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"简历投递即日起至10.25 24:00；全国42家分行+4家…","source":"民生银行招聘官网 career.cmbc.c…","publishedAt":"2026-09-04","url":"https://career.cmbc.com.cn"},{"id":"cbhb-2027","org":"渤海银行","position":"2027年校园招聘（总行/分行培训见习生；济…","category":"央国企","batch":"正式批","deadline":"2026-10-18","deadlineNote":"在线投递即日起至2026-10-18 24:00；笔试10月…","source":"渤海银行校招简章（多所高校就业网转载）","publishedAt":"2026-09-15","url":"https://campus.51job.com/bhyh2027"},{"id":"czbank-2027","org":"浙商银行","position":"2027校园招聘（CZ星计划/总行岗位/分支…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"网申即日起至2026-10-25截止，每人限投1个意向岗位；…","source":"浙商银行招聘官网 zp.czbank.com…","publishedAt":"2026-09-12","url":"https://zp.czbank.com.cn"},{"id":"weifang-bank-2027","org":"潍坊银行","position":"2027校园招聘（总行/分支机构管培生：经济…","category":"央国企","batch":"正式批","deadline":"2026-11-10","deadlineNote":"网上报名9月-2026-11-10截止；11月中旬简历筛选、…","source":"潍坊银行2027校招简章（齐鲁网/大众网）","publishedAt":"2026-09-17","url":"https://wfbank2027.zhaopin.com"},{"id":"hubei-plan-2027","org":"湖北省规划设计研究总院","position":"2027校园招聘（土地规划设计岗：土地资源管…","category":"央国企","batch":"正式批","deadline":"2026-11-16","deadlineNote":"网申截止2026-11-16（以招聘公告为准）；面向2027…","source":"湖北省规划设计研究总院27秋招（超级简历/官…","publishedAt":"2026-09-19","url":"https://www.hbsghy.com/JobPosting_list.html"},{"id":"qilu-bank-2027","org":"齐鲁银行","position":"2027校园招聘（管培生 / 综合柜员 / …","category":"央国企","batch":"正式批","deadline":"2026-10-15","deadlineNote":"网申截止2026-10-15；报名入口 xy.liepin.…","source":"齐鲁银行官网 qlbchina.com","publishedAt":"2026-09-17","url":"https://xy.liepin.com/qlbank2027"},{"id":"pingan-jn-2027","org":"平安银行济南分行","position":"2027届秋季校园招聘（零售/公司/业务/运…","category":"央国企","batch":"正式批","deadline":"2026-11-06","deadlineNote":"网申8月10日-11月6日截止；专业不限（经济/金融/管理学…","source":"平安银行校园招聘（多所高校就业网转载）","publishedAt":"2026-08-14","url":"https://campus.pingan.com"},{"id":"china-life-2027","org":"中国人寿保险（股份公司）","position":"2027年度校园招聘（营销管理 / 运营管理…","category":"央国企","batch":"正式批","deadline":"2026-11-15","deadlineNote":"总部即日起至10月15日；下辖机构（含山东省分公司）最晚至1…","source":"中国人寿招聘官网 chinalife.com…","publishedAt":"2026-09-09","url":"https://www.chinalife.com.cn/chinalife/"},{"id":"sd-ghy-2027","org":"山东省城乡规划设计研究院有限公司","position":"专业技术岗（城乡规划 / 土地资源 / GI…","category":"央国企","batch":"正式批（滚动招聘）","deadline":"","deadlineNote":"邮箱投递简历+作品集，招满即止；国家甲级城市规划/建筑设计院…","source":"山东省城乡规划设计研究院 sdghy.com…","publishedAt":"2026-09-09","url":"https://www.sdghy.com/"},{"id":"sinotruk-2027","org":"中国重汽集团（中国重型汽车集团有限公司）","position":"2027届校园招聘·管理类岗（财务管理 / …","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"网申9月19日开启、招满即止（滚动招聘）；管理类招约30人，…","source":"中国重汽招聘平台 zhaopin.sinot…","publishedAt":"2026-09-19","url":"https://zhaopin.sinotruk.com:8009/"},{"id":"wf-ghy-2027","org":"潍坊市规划设计研究院","position":"土地资源管理方向专业技术岗（国土空间规划 /…","category":"央国企","batch":"2027届校招（待发布，参考2026年岗位）","deadline":"","deadlineNote":"2026年曾招土地资源管理方向硕士2人（土地管理/土地资源管…","source":"潍坊市规划设计研究院官网 wfsghy.co…","publishedAt":"","url":"https://www.wfsghy.com/join"},{"id":"zdpg-2027","org":"广东中地土地房地产评估与规划设计有限公司（中地顾问）","position":"区域储备人才 / 课题研究员 / 项目助理（…","category":"其他","batch":"正式批","deadline":"","deadlineNote":"2026-09-23发布，简历邮箱 zd@zdpg.com.…","source":"高校就业网转载简章（中地顾问官网 zdpg.…","publishedAt":"2026-09-23","url":"https://jy.gzhu.edu.cn/web/Index/jobs-brief-detail?id=SPUXSW9"},{"id":"tjupdi-2027","org":"上海同济城市规划设计研究院有限公司（TJUPDI）","position":"土地资源管理 / 城乡规划 / 资源环境生态…","category":"央国企","batch":"正式批","deadline":"2026-11-08","deadlineNote":"简历投递截止2026-11-08；2026-09-28发布，…","source":"同济规划院官网 tjupdi.com/rec…","publishedAt":"2026-09-28","url":"https://www.tjupdi.com/recruit/campus"},{"id":"cib-2027","org":"兴业银行股份有限公司","position":"2027校园招聘（总行/分行管理培训生、市场…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"公告2026-09-20发布，网申截止2026-10-25；…","source":"兴业银行2027校园招聘（via 银行招聘网…","publishedAt":"2026-09-20","url":"https://www.cib.com.cn/"},{"id":"njcb-2027","org":"南京银行股份有限公司","position":"2027届全球校园招聘（综合柜员岗 / 业务…","category":"央国企","batch":"正式批","deadline":"2026-10-11","deadlineNote":"网申2026-09-08至10-11 24:00；除信息科技…","source":"南京银行招聘官网 job.njcb.com.…","publishedAt":"2026-09-08","url":"https://job.njcb.com.cn"},{"id":"bjbank-2027","org":"北京银行股份有限公司","position":"2027校园招聘·金融英才岗（客户经理/营销…","category":"央国企","batch":"正式批","deadline":"2026-10-15","deadlineNote":"网申至2026-10-15 24:00；金融英才岗不限专业（…","source":"北京银行招聘官网 bankofbeijing…","publishedAt":"2026-09-28","url":"https://bankofbeijing.zhiye.com"},{"id":"nanning-survey-2027","org":"南宁市勘测设计院集团有限公司","position":"2027届秋招·规划咨询类（城市规划/人文地…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"邮箱投递招满即止（无官方截止日）；简历命名“学校+姓名+专业…","source":"应届生求职网宣讲会 xjh_6210494（…","publishedAt":"2026-09-14","url":"https://m.yingjiesheng.com/xuanjianghui/xjh_6210494"},{"id":"cgdg-2027","org":"中国绿发投资集团有限公司","position":"2027校招·综合职能类（企业管理/工商管理…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"网申截止约2026-10-25，11月上旬笔试、11月中旬终…","source":"国务院国资委人事招聘专栏（10-08发布）/…","publishedAt":"2026-10-08","url":"https://zhaopin.cgdg.com"},{"id":"minmetals-2027","org":"中国五矿集团有限公司（含北京五矿有色金属、五矿矿业/鲁中矿业等子公司）","position":"2027校招·职能/管理类（业绩管理/人力/…","category":"央国企","batch":"正式批","deadline":"2026-10-25","deadlineNote":"网申约10-24至10-25截止，各子公司截止时间不一（以中…","source":"中国五矿招聘官网 zhaopin.minme…","publishedAt":"2026-09-16","url":"https://zhaopin.minmetals.com.cn"},{"id":"poly-2027","org":"中国保利集团有限公司（含保利发展控股等子公司）","position":"2027「启航计划」管培生（经营管理/产业管…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"集团整体不限专业（100人）；总部经营管理类管培须硕士及以上…","source":"南开大学就业网 / 保利集团招聘平台","publishedAt":"2026-09-29","url":"http://campus.51job.com/ploy"},{"id":"sinopharm-2027","org":"中国医药集团有限公司（国药集团，含国药控股山东等）","position":"2027「星耀计划」综合管理类/运营管理类（…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"设综合管理类/运营管理类等8大类；部分子公司管培岗专业要求管…","source":"国药集团招聘平台（国聘 / 高校人才网）","publishedAt":"2026-09-18","url":"https://sinopharm2027.iguopin.com/notice"},{"id":"picc-2027","org":"中国人民保险集团（PICC）","position":"综合行政岗 / 管培生 / 综合管理类（公共…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2026-08-01开放；集团本级2026年10月中旬截止、…","source":"中国人民保险招聘官网 picc.zhiye.…","publishedAt":"2026-08-01","url":"https://picc.zhiye.com/xiaoyuan"},{"id":"sinosure-2027","org":"中国出口信用保险公司（中信保）","position":"综合管理类 / 人力资源类 / 纪检监察类 …","category":"央国企","batch":"正式批","deadline":"2026-11-05","deadlineNote":"简历投递2026-10-10至11-05 24:00，11月…","source":"中国信保招聘官网 sinosure.zhao…","publishedAt":"2026-10-10","url":"https://sinosure.zhaopin.com"},{"id":"cofco-2027","org":"中粮集团（COFCO）","position":"运营管理类 / 人事行政类 / 党群纪检类 …","category":"央国企","batch":"正式批","deadline":"2026-10-28","deadlineNote":"简历投递截止2026-10-28，约1500人，16类岗位；…","source":"中粮校招平台 campus.51job.co…","publishedAt":"2026-09-16","url":"https://campus.51job.com/cofco/campus.html"},{"id":"cntp-2027","org":"中国太平保险集团","position":"运营支持类 / 综合管理类（公共管理对口；境…","category":"央国企","batch":"正式批","deadline":"","deadlineNote":"2026-08-31启动，预计12月底结束，各机构招满即止，…","source":"中国太平招聘官网 cntp.zhiye.co…","publishedAt":"2026-08-31","url":"https://cntp.zhiye.com/campus"}],"generatedAt":"2026-10-11T00:32:12.335Z"};
 /* 说明：上方为内嵌数据快照；如需每日更新，请将最新 recruit-seed.js 放同目录后点「刷新数据」，将自动覆盖。 */
 
+/* ============ 基础工具 ============ */
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const LS = {
@@ -202,64 +226,92 @@ function statusOf(rec){
 }
 function fmtDate(d){ return d?d:''; }
 
+/* ============ 默认画像/数据（基于已知简历预填） ============ */
 const DEFAULT_PROFILE = {
-  name:'（你的姓名）', email:'（你的邮箱）', phone:'（你的电话）', wechat:'（你的微信）', portfolio:'（你的作品集/论文链接）',
+  name:'（你的姓名）',
+  email:'（你的邮箱）',
+  phone:'（你的电话）',
+  wechat:'（你的微信）',
+  portfolio:'（你的作品集/论文链接）',
   school:'山东农业大学 · 公共管理学（土地资源管理方向）硕士 2027 届',
   strengths:[
     '土地资源管理专业硕士：系统掌握土地资源调查与评价、国土空间规划、土地制度与政策、不动产登记等专业知识，专业与自然资源系统岗位高度对口',
     '公共管理学科训练：熟悉公共政策分析、公共部门管理、行政管理框架，能胜任事业单位/政府部门/国企的综合管理、政策研究类岗位',
-    '数据与工具能力：具备 GIS/遥感、SPSS/Stata 等统计分析能力，可处理空间数据与政策数据的实证分析',
-    '科研与写作能力：硕士期间参与科研课题与论文写作，能独立完成研究报告、政策解读、公文材料',
+    '数据与工具能力：具备 GIS/遥感（土地资源方向常用）、SPSS/Stata 等统计分析能力，可处理空间数据与政策数据的实证分析',
+    '科研与写作能力：硕士期间参与科研课题与论文写作（可补充具体情况），能独立完成研究报告、政策解读、公文材料',
     '（示例）加分项：发表论文 / 参与课题 / 实习经历 / 荣誉奖项，挑与目标岗位相关的写'
   ],
-  weaknesses:['（示例）正式实习经历较少 → 用科研课题与调研实践补位','（示例）某工具或方向不熟悉 → 说明已在补齐','（示例）实践经验有限 → 强调在校期间完成的课题项目'],
-  prep:['准备 1 分钟 / 3 分钟两版自我介绍','整理论文 / 课题 / 调研报告等成果','演练 STAR 行为题','补行业认知：自然资源部及山东省自然资源系统动态、国土空间规划改革、土地管理制度最新政策','准备 3 个高质量反问','模拟面试前测试设备与网络']
+  weaknesses:[
+    '（示例）正式实习经历较少 → 用科研课题与调研实践补位，突出专业对口与研究方法',
+    '（示例）某工具或方向不熟悉（如大数据编程）→ 说明已在补齐，给出具体学习路径',
+    '（示例）实践经验有限 → 强调在校期间完成的课题项目与实际产出'
+  ],
+  prep:[
+    '准备 1 分钟 / 3 分钟两版自我介绍（突出土地资源管理专业对口 + 硕士科研能力）',
+    '整理论文 / 课题 / 调研报告等成果，准备 1-2 个可深度展开的项目',
+    '演练 STAR 行为题：课题研究、团队协作、数据处理的案例各准备一个',
+    '补行业认知：自然资源部及山东省自然资源系统动态、国土空间规划改革、土地管理制度最新政策',
+    '准备 3 个高质量反问（岗位具体业务 / 培养路径 / 单位研究方向）',
+    '模拟面试前测试设备与网络（视频面试）'
+  ]
 };
 const DEFAULT_QA = [
-  {q:'请做一分钟自我介绍',a:'（示例）我是山东农业大学公共管理学硕士，研究方向为土地资源管理。专业上系统学习过国土空间规划、土地制度与政策、土地资源评价等课程，硕士期间（课题/论文成果）。希望加入贵单位。'},
-  {q:'为什么选择这个岗位 / 方向？',a:'（示例）结合自身土地资源管理专业背景与课题经历，说明对自然资源管理/规划方向的长期兴趣。'},
-  {q:'你最大的优势是什么？',a:'（示例）专业对口+科研能力：土地资源管理方向的系统训练，加上硕士课题的实证研究经验。'},
-  {q:'你的劣势 / 不足是什么？',a:'（示例）坦诚一个真实但可弥补的不足（如正式实习较少），并说明改进路径。'},
-  {q:'介绍你最满意的项目 / 课题',a:'（示例）用 STAR 讲一个课题：背景→角色与方法→可量化结论→实践价值。'},
-  {q:'你对国土空间规划/土地管理政策的理解？',a:'（示例）结合最新政策（国土空间规划体系改革、耕地保护、土地要素市场化配置）谈理解。'},
+  {q:'请做一分钟自我介绍',a:'（示例）我是山东农业大学公共管理学硕士，研究方向为土地资源管理。专业上系统学习过国土空间规划、土地制度与政策、土地资源评价等课程，硕士期间（课题/论文成果）。希望加入贵单位，是因为（结合单位业务亮点的一句话）。'},
+  {q:'为什么选择这个岗位 / 方向？',a:'（示例）结合自身土地资源管理专业背景与课题经历，说明对自然资源管理/规划方向的长期兴趣，并提到该单位在该方向的代表业务。'},
+  {q:'你最大的优势是什么？',a:'（示例）专业对口+科研能力：土地资源管理方向的系统训练，加上硕士课题的实证研究经验（量化证据），能直接适配岗位需求。'},
+  {q:'你的劣势 / 不足是什么？',a:'（示例）坦诚一个真实但可弥补的不足（如正式实习较少），并说明用科研项目与调研实践补位，给出具体改进路径。'},
+  {q:'介绍你最满意的项目 / 课题',a:'（示例）用 STAR 讲一个课题：研究背景→你的角色与研究方法→可量化结论→实践价值。挑与你目标岗位最相关的。'},
+  {q:'你对国土空间规划/土地管理政策的理解？',a:'（示例）结合最新政策（如国土空间规划体系改革、耕地保护、土地要素市场化配置）谈自己的理解，展示专业视野。'},
   {q:'如何看待基层/事业单位工作节奏？',a:'（示例）表达对公共部门工作节奏的认同，强调服务意识、规范意识与持续学习。'},
-  {q:'你的职业规划？',a:'（示例）1-2年深耕专业岗位打牢基本功，3年成长为骨干，长期向目标方向发展。'},
+  {q:'你的职业规划？',a:'（示例）1-2年深耕专业岗位打牢业务基本功，3年成长为能独立承担研究/管理任务的骨干，长期向（方向）发展。'},
   {q:'你期望的薪资 / 待遇？',a:'（示例）参考事业单位/国企行情表达区间，强调更看重平台与成长空间。'},
-  {q:'你有什么想问我们的？',a:'（示例）问岗位具体业务方向、单位重点项目、新人培养机制等 2-3 个高质量问题。'}
+  {q:'你有什么想问我们的？',a:'（示例）问岗位具体业务方向、单位承担的重点项目、新人培养机制等 2-3 个高质量问题。'}
 ];
 
+/* ============ 状态 ============ */
 let PROFILE = LS.get('qz_profile', DEFAULT_PROFILE);
 let POSITIONS = LS.get('qz_positions', []);
 let INTERVIEWS = LS.get('qz_interviews', []);
 let QA = LS.get('qz_qa', DEFAULT_QA);
 let RECRUIT = window.__RECRUIT_DATA__ || {meta:{updatedAt:'(未加载)'},records:[]};
+
 function dataOk(){ return window.__RECRUIT_DATA__ && window.__RECRUIT_DATA__.records && window.__RECRUIT_DATA__.records.length; }
 
+/* ============ 导航 ============ */
 $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
   $$('.nav-btn').forEach(x=>x.classList.remove('active'));
   b.classList.add('active');
+  $$('.page').forEach(p=>p.classList.remove('show'));
   $('#page-'+b.dataset.page).classList.add('show');
   if(b.dataset.page==='pool') renderPool();
   if(b.dataset.page==='jobs') renderJobs();
   if(b.dataset.page==='interview') renderInterviews();
 }));
 
+/* ============ 信息池看板 ============ */
+// 复制文本（优先 clipboard API，失败回退 execCommand）
 function copyText(t,label){
   const done=()=>toast('已复制：'+(label||t));
-  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done).catch(()=>fallbackCopy(t,done)); }
-  else fallbackCopy(t,done);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done).catch(()=>fallbackCopy(t,done));
+  } else fallbackCopy(t,done);
 }
 function fallbackCopy(t,done){
   const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; ta.style.top='0'; document.body.appendChild(ta); ta.focus(); ta.select();
   try{ document.execCommand('copy'); done&&done(); }catch(e){ toast('复制失败，请手动复制'); }
   document.body.removeChild(ta);
 }
+// JD / 公告链接：优先取用户右键修正后的覆盖值，否则用 seed 里的原始值
 function effUrl(r){
-  const ov=LS.get('qz_url_ovr',{}); const o=ov[r.id]; return (o && o.url) ? o.url : (r.url||'');
+  const ov=LS.get('qz_url_ovr',{});
+  const o=ov[r.id];
+  return (o && o.url) ? o.url : (r.url||'');
 }
+// 右键编辑岗位的 JD / 公告链接（存 localStorage，可随时改回）
 function editUrl(id){
   const r=RECRUIT.records.find(x=>x.id===id); if(!r) return;
-  const ov=LS.get('qz_url_ovr',{}); const hasOvr=!!(ov[r.id]&&ov[r.id].url);
+  const ov=LS.get('qz_url_ovr',{});
+  const hasOvr=!!(ov[r.id]&&ov[r.id].url);
   const cur=hasOvr?ov[r.id].url:(r.url||'');
   openModal(`<h3>编辑 JD / 公告链接</h3>
     <div class="field"><label>单位 / 岗位</label><div class="muted">${esc(r.org)} · ${esc(r.position)}</div></div>
@@ -267,14 +319,18 @@ function editUrl(id){
     <div class="field"><label>新链接（清空则恢复默认）</label><input id="u_url" value="${esc(cur)}" placeholder="https://..."></div>
     <div style="text-align:right;margin-top:10px"><button class="btn ghost" onclick="closeModal()">取消</button> <button class="btn coral" id="u_save">保存</button></div>`);
   $('#u_save').addEventListener('click',()=>{
-    const v=$('#u_url').value.trim(); const ov2=LS.get('qz_url_ovr',{});
+    const v=$('#u_url').value.trim();
+    const ov2=LS.get('qz_url_ovr',{});
     if(v) ov2[r.id]={url:v}; else delete ov2[r.id];
-    LS.set('qz_url_ovr',ov2); closeModal(); renderPool();
+    LS.set('qz_url_ovr',ov2);
+    closeModal(); renderPool();
     toast(v?'JD 链接已更新':'已恢复默认链接');
   });
 }
+// 按天确定性取 3 个报名中岗位（同日稳定、跨天变化）
 function renderDailyRec(){
-  const recs=RECRUIT.records||[]; const key=todayKey();
+  const recs=RECRUIT.records||[];
+  const key=todayKey();
   const open=recs.filter(r=>statusOf(r).key!=='closed');
   const box=$('#dailyRec');
   if(!open.length){ box.innerHTML='<div class="rec-head">🔥 今日推荐 <span class="muted">'+key+'</span></div><div class="muted">暂无报名中的岗位，点「↻ 刷新数据」或等待每日 8:00 更新。</div>'; return; }
@@ -301,14 +357,22 @@ function renderDailyRec(){
   $$('#dailyRec [data-refresh-rec]').forEach(b=>b.addEventListener('click',refreshDailyRec));
   $$('#dailyRec [data-jd]').forEach(a=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
 }
+// 今日推荐的确定性种子：同一天稳定、刷新换一批、跨天自动重置
 function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function daySeed(){
-  const key=todayKey(); const s=LS.get('qz_rec_seed',null);
+  const key=todayKey();
+  const s=LS.get('qz_rec_seed',null);
   if(s&&s.date===key) return s.seed;
   let h=0; for(let i=0;i<key.length;i++) h=(h*31+key.charCodeAt(i))>>>0;
-  LS.set('qz_rec_seed',{date:key,seed:h}); return h;
+  LS.set('qz_rec_seed',{date:key,seed:h});
+  return h;
 }
-function refreshDailyRec(){ const key=todayKey(); LS.set('qz_rec_seed',{date:key,seed:Math.floor(Math.random()*1e9)}); renderDailyRec(); toast('已换一批今日推荐'); }
+function refreshDailyRec(){
+  const key=todayKey();
+  LS.set('qz_rec_seed',{date:key,seed:Math.floor(Math.random()*1e9)});
+  renderDailyRec();
+  toast('已换一批今日推荐');
+}
 function renderPool(){
   if(!dataOk()){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">未找到 recruit-seed.js，请将本文件与 recruit-seed.js / recruit-data.json 放在同一目录。</td></tr>'; $('#poolStats').innerHTML=''; return; }
   const recs=RECRUIT.records;
@@ -363,6 +427,7 @@ $('#btnRefresh').addEventListener('click',()=>{
   const s=document.createElement('script'); s.src='recruit-seed.js?v='+Date.now(); s.onload=()=>{ RECRUIT=window.__RECRUIT_DATA__; renderPool(); toast('信息池已刷新'); }; s.onerror=()=>toast('未找到外部 recruit-seed.js，继续使用内嵌数据'); document.body.appendChild(s);
 });
 
+/* ============ 岗位管理 ============ */
 const STATUSES=['未投递','已投递','笔试中','面试中','offer','已拒绝'];
 function renderPipeline(){
   const counts={}; STATUSES.forEach(s=>counts[s]=0); POSITIONS.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
@@ -424,9 +489,12 @@ $('#btnAddJob').addEventListener('click',()=>{
   });
 });
 
+/* ============ 简历定制（已移除） ============ */
+
+/* ============ 面试进度 ============ */
 function renderInterviews(){
   if(!POSITIONS.length && !INTERVIEWS.length){ $('#interviewList').innerHTML='<div class="empty">还没有面试记录，先到「岗位管理」录入岗位</div>'; return; }
-  if(!INTERVIEWS.length){ $('#interviewList').innerHTML='<div class="empty">暂无面试记录，点「记录一场面试」开始</div>'; return; }
+  if(!INTERVIEWS.length){ $('#interviewList').innerHTML='<div class="empty">暂无面试记录，点「记录一场面试」开始</div>'; }
   const order=INTERVIEWS.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||''));
   $('#interviewList').innerHTML=order.map(iv=>{
     const p=POSITIONS.find(x=>x.id===iv.jobId);
@@ -463,21 +531,29 @@ function editInterview(id){
     if(!id) INTERVIEWS.unshift(iv); LS.set('qz_interviews',INTERVIEWS); closeModal(); renderInterviews(); toast('已保存面试记录');
   });
 }
+
+/* ============ 面试中 → 自动建「一面」 ============ */
+// 状态变为「面试中」且尚无该岗位面试记录时，自动填入面试进度一条「一面」
 function ensureInterviewFor(p){
   if(!p || p.status!=='面试中') return false;
-  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false;
+  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false; // 已有该岗位记录则不重复建
   INTERVIEWS.unshift({id:uid(),jobId:p.id,date:new Date().toISOString().slice(0,10),round:'一面',form:'视频',qa:'',review:'',result:'待定'});
   return true;
 }
+// 初始化时补齐：无论状态是 UI 改的、import 导入的、还是手动改的 localStorage，只要「面试中」且缺记录就建（幂等）
 function syncInterviews(){
   let added=0; POSITIONS.forEach(p=>{ if(ensureInterviewFor(p)) added++; });
   if(added) LS.set('qz_interviews',INTERVIEWS);
   return added;
 }
+
+/* ============ 弹窗 ============ */
 function openModal(html){ $('#modalBox').innerHTML=html; $('#modalBg').classList.add('show'); }
 function closeModal(){ $('#modalBg').classList.remove('show'); }
 $('#modalBg').addEventListener('click',e=>{ if(e.target===$('#modalBg')) closeModal(); });
-syncInterviews();
+
+/* ============ 初始化 ============ */
+syncInterviews(); // 补齐「面试中」岗位对应的「一面」记录（幂等）
 renderPool();
 toast(dataOk()? '信息池已加载 '+RECRUIT.records.length+' 条' : '未检测到 recruit-seed.js');
 </script>
