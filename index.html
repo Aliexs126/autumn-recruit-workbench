@@ -246,7 +246,7 @@ const DEFAULT_QA = [
   {q:'介绍你最满意的项目 / 课题',a:'（示例）用 STAR 讲一个课题：研究背景→你的角色与研究方法→可量化结论→实践价值。挑与你目标岗位最相关的。'},
   {q:'你对国土空间规划/土地管理政策的理解？',a:'（示例）结合最新政策（如国土空间规划体系改革、耕地保护、土地要素市场化配置）谈自己的理解，展示专业视野。'},
   {q:'如何看待基层/事业单位工作节奏？',a:'（示例）表达对公共部门工作节奏的认同，强调服务意识、规范意识与持续学习。'},
-  {q:'你的职业规划？',a:'（示例）1-2年深耕专业岗位带牢业务基本功，3年成长为能独立承担研究/管理任务的骨干，长期向（方向）发展。'},
+  {q:'你的职业规划？',a:'（示例）1-2年深耕专业岗位打牢业务基本功，3年成长为能独立承担研究/管理任务的骨干，长期向（方向）发展。'},
   {q:'你期望的薪资 / 待遇？',a:'（示例）参考事业单位/国企行情表达区间，强调更看重平台与成长空间。'},
   {q:'你有什么想问我们的？',a:'（示例）问岗位具体业务方向、单位承担的重点项目、新人培养机制等 2-3 个高质量问题。'}
 ];
@@ -435,7 +435,7 @@ function renderJobs(){
   }).join('');
   $$('#jobsTable [data-st]').forEach(s=>s.addEventListener('change',()=>{ const p=POSITIONS.find(x=>x.id===s.dataset.st); p.status=s.value; LS.set('qz_positions',POSITIONS); renderPipeline(); const added=ensureInterviewFor(p); if(added){ LS.set('qz_interviews',INTERVIEWS); renderInterviews(); toast('状态→'+p.status+' · 已自动建「一面」'); } else { toast('状态→'+p.status); } }));
   $$('#jobsTable [data-note]').forEach(b=>b.addEventListener('click',()=>{ const p=POSITIONS.find(x=>x.id===b.dataset.note); const v=prompt('备注（进度/HR/渠道等）：',p.note||''); if(v!==null){ p.note=v; LS.set('qz_positions',POSITIONS); renderJobs(); } }));
-  $$('#jobsTable [data-del]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('确认删除该岗位记录？')){ POSITIONS=POSITS.filter(x=>x.id!==b.dataset.del); LS.set('qz_positions',POSITIONS); renderJobs(); } }));
+  $$('#jobsTable [data-del]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('确认删除该岗位记录？')){ POSITIONS=POSITIONS.filter(x=>x.id!==b.dataset.del); LS.set('qz_positions',POSITIONS); renderJobs(); } }));
 }
 $('#jfStatus').addEventListener('change',renderJobs);
 $('#jfSearch').addEventListener('input',renderJobs);
