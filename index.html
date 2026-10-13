@@ -12,7 +12,6 @@
     --coral:#FF7A66; --coral-d:#E85C47; --coral-soft:#FFE6E0;
     --serif:"Songti SC","Noto Serif SC",Georgia,"Times New Roman",serif;
     --sans:-apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-    /* 动效缓动曲线（强 ease-out，内置缓动太弱） */
     --ease-out:cubic-bezier(0.23,1,0.32,1);
     --ease-in-out:cubic-bezier(0.77,0,0.175,1);
     --ease-drawer:cubic-bezier(0.32,0.72,0,1);
@@ -21,7 +20,6 @@
   html,body{margin:0;height:100%}
   body{background:var(--cream);color:var(--ink);font-family:var(--sans);line-height:1.6}
   .app{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
-  /* sidebar */
   .side{background:linear-gradient(180deg,#EFE7FA,#E3D8F3);padding:22px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;overflow:auto}
   .brand{font-family:var(--serif);font-size:22px;font-weight:800;color:var(--purple-deep);margin-bottom:4px;line-height:1.25}
   .brand small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);font-weight:500;margin-top:2px}
@@ -33,7 +31,6 @@
   .nav-btn:active{transform:scale(0.98)}
   .nav-btn.active{background:#fff;color:var(--purple-deep);font-weight:700;box-shadow:0 4px 14px rgba(110,82,166,.12)}
   .side .foot{margin-top:auto;font-size:11px;color:var(--muted);padding-top:14px;border-top:1px solid rgba(110,82,166,.18)}
-  /* main */
   .main{padding:26px 30px 60px;overflow:auto}
   h1,h2,h3{font-family:var(--serif);font-weight:800}
   .page-title{font-size:26px;margin:0 0 2px}
@@ -74,7 +71,6 @@
   .tip{background:var(--coral-soft);border:1px solid var(--coral);color:var(--coral-d);padding:10px 14px;border-radius:12px;margin-bottom:14px;font-size:13px;font-weight:600}
   .muted{color:var(--muted);font-size:12px}
   .note{color:var(--muted);font-size:11px}
-  /* 今日推荐 */
   .rec-card{background:linear-gradient(135deg,#FBEDE7,#F4ECFB);border:1px solid var(--coral-soft);border-radius:16px;padding:16px 18px;margin:6px 0 18px}
   .rec-head{font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink);margin-bottom:12px}
   .rec-head .muted{font-size:11.5px;font-weight:400;margin-left:8px}
@@ -110,16 +106,14 @@
   .qitem .a{margin-top:8px}
   pre.code{background:#2E2A33;color:#F3EEE5;border-radius:12px;padding:14px;white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.55;max-height:320px;overflow:auto}
   @media(max-width:860px){
-    .app{grid-template-columns:1fr} 
+    .app{grid-template-columns:1fr}
     .side{position:relative;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px;padding:12px}
     .brand{width:100%} .nav-btn{flex:1 1 auto;justify-content:center;padding:8px 10px;font-size:12.5px}
     .side .foot{display:none}
     .main{padding:18px 16px 50px}
     .grid-stats{grid-template-columns:repeat(2,1fr)}
   }
-  /* 键盘焦点可见性（a11y） */
   :focus-visible{outline:2px solid var(--coral-d);outline-offset:2px;border-radius:8px}
-  /* 减少动态：保留透明度/颜色过渡，去掉位移与缩放手势 */
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-property:opacity!important}
     .page.show{animation:none}
@@ -138,7 +132,6 @@
   </aside>
 
   <main class="main">
-    <!-- 信息池看板 -->
     <section class="page show" id="page-pool">
       <h1 class="page-title">信息池看板</h1>
       <p class="page-sub">每日 8:00 自动搜集更新 · 仅 2027 届 · 已排除社招 · 来源：国资委 / 中国公共招聘网 / 国聘网 / 各集团与大厂官网</p>
@@ -157,7 +150,6 @@
       </div>
     </section>
 
-    <!-- 岗位管理 -->
     <section class="page" id="page-jobs">
       <h1 class="page-title">岗位管理</h1>
       <p class="page-sub">自动抓取（信息池一键录入）+ 手动补充 · 全链路追踪</p>
@@ -175,9 +167,6 @@
       </div>
     </section>
 
-    <!-- 简历定制模块已移除；面试准备也移至 WorkBuddy，提示见「面试进度」顶部 -->
-
-    <!-- 面试进度 -->
     <section class="page" id="page-interview">
       <h1 class="page-title">面试进度</h1>
       <p class="page-sub">统一记录每场面试的问题与复盘</p>
@@ -185,22 +174,16 @@
       <div class="toolbar"><button class="btn coral" id="btnAddInterview">+ 记录一场面试</button></div>
       <div id="interviewList"></div>
     </section>
-
-    <!-- 面试准备模块已移除：提示见「面试进度」顶部 -->
-
-    <!-- 独立看板模块已移除 -->
   </main>
 </div>
 
-<!-- 通用弹窗 -->
 <div class="modal-bg" id="modalBg"><div class="modal" id="modalBox"></div></div>
 <div class="toast" id="toast"></div>
 
-<!-- 信息池数据（同目录，定时任务更新后刷新） -->
 <script src="recruit-seed.js"></script>
 <script>
 /* ============ 内嵌信息池数据（单文件自包含：无 recruit-seed.js 也可直接用） ============ */
-window.__RECRUIT_DATA__ = __PLACEHOLDER__;
+window.__RECRUIT_DATA__ = __DATA__;
 /* 说明：上方为内嵌数据快照；如需每日更新，请将最新 recruit-seed.js 放同目录后点「刷新数据」，将自动覆盖。 */
 
 /* ============ 基础工具 ============ */
@@ -289,7 +272,6 @@ $$('.nav-btn').forEach(b=>b.addEventListener('click',()=>{
 }));
 
 /* ============ 信息池看板 ============ */
-// 复制文本（优先 clipboard API，失败回退 execCommand）
 function copyText(t,label){
   const done=()=>toast('已复制：'+(label||t));
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -301,13 +283,11 @@ function fallbackCopy(t,done){
   try{ document.execCommand('copy'); done&&done(); }catch(e){ toast('复制失败，请手动复制'); }
   document.body.removeChild(ta);
 }
-// JD / 公告链接：优先取用户右键修正后的覆盖值，否则用 seed 里的原始值
 function effUrl(r){
   const ov=LS.get('qz_url_ovr',{});
   const o=ov[r.id];
   return (o && o.url) ? o.url : (r.url||'');
 }
-// 右键编辑岗位的 JD / 公告链接（存 localStorage，可随时改回）
 function editUrl(id){
   const r=RECRUIT.records.find(x=>x.id===id); if(!r) return;
   const ov=LS.get('qz_url_ovr',{});
@@ -327,7 +307,6 @@ function editUrl(id){
     toast(v?'JD 链接已更新':'已恢复默认链接');
   });
 }
-// 按天确定性取 3 个报名中岗位（同日稳定、跨天变化）
 function renderDailyRec(){
   const recs=RECRUIT.records||[];
   const key=todayKey();
@@ -357,7 +336,6 @@ function renderDailyRec(){
   $$('#dailyRec [data-refresh-rec]').forEach(b=>b.addEventListener('click',refreshDailyRec));
   $$('#dailyRec [data-jd]').forEach(a=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
 }
-// 今日推荐的确定性种子：同一天稳定、刷新换一批、跨天自动重置
 function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
 function daySeed(){
   const key=todayKey();
@@ -489,8 +467,6 @@ $('#btnAddJob').addEventListener('click',()=>{
   });
 });
 
-/* ============ 简历定制（已移除） ============ */
-
 /* ============ 面试进度 ============ */
 function renderInterviews(){
   if(!POSITIONS.length && !INTERVIEWS.length){ $('#interviewList').innerHTML='<div class="empty">还没有面试记录，先到「岗位管理」录入岗位</div>'; return; }
@@ -533,14 +509,12 @@ function editInterview(id){
 }
 
 /* ============ 面试中 → 自动建「一面」 ============ */
-// 状态变为「面试中」且尚无该岗位面试记录时，自动填入面试进度一条「一面」
 function ensureInterviewFor(p){
   if(!p || p.status!=='面试中') return false;
-  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false; // 已有该岗位记录则不重复建
+  if(INTERVIEWS.some(iv=>iv.jobId===p.id)) return false;
   INTERVIEWS.unshift({id:uid(),jobId:p.id,date:new Date().toISOString().slice(0,10),round:'一面',form:'视频',qa:'',review:'',result:'待定'});
   return true;
 }
-// 初始化时补齐：无论状态是 UI 改的、import 导入的、还是手动改的 localStorage，只要「面试中」且缺记录就建（幂等）
 function syncInterviews(){
   let added=0; POSITIONS.forEach(p=>{ if(ensureInterviewFor(p)) added++; });
   if(added) LS.set('qz_interviews',INTERVIEWS);
@@ -553,7 +527,7 @@ function closeModal(){ $('#modalBg').classList.remove('show'); }
 $('#modalBg').addEventListener('click',e=>{ if(e.target===$('#modalBg')) closeModal(); });
 
 /* ============ 初始化 ============ */
-syncInterviews(); // 补齐「面试中」岗位对应的「一面」记录（幂等）
+syncInterviews();
 renderPool();
 toast(dataOk()? '信息池已加载 '+RECRUIT.records.length+' 条' : '未检测到 recruit-seed.js');
 </script>
