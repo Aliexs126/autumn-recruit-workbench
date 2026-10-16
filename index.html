@@ -213,7 +213,7 @@ const LS = {
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),1800); }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function todayMid(){ const t=new Date(); return new Date(t.getFullYear(),t.getMonth(),t.getDate()); }
+function todayMid(){ const t=new Date(); return new Date(); return new Date(t.getFullYear(),t.getMonth(),t.getDate()); }
 function statusOf(rec){
   const base=todayMid();
   const dl=rec.deadline?new Date(rec.deadline+'T00:00:00'):null;
@@ -355,7 +355,7 @@ function renderDailyRec(){
   $$('#dailyRec [data-copy]').forEach(b=>b.addEventListener('click',()=>copyText(b.dataset.copy)));
   $$('#dailyRec [data-enter]').forEach(b=>b.addEventListener('click',()=>enterJob(b.dataset.enter)));
   $$('#dailyRec [data-refresh-rec]').forEach(b=>b.addEventListener('click',refreshDailyRec));
-  $$('#dailyRec [data-jd]').forEach(b=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
+  $$('#dailyRec [data-jd]').forEach(a=>a.addEventListener('contextmenu',e=>{ e.preventDefault(); editUrl(a.dataset.jd); }));
 }
 // 今日推荐的确定性种子：同一天稳定、刷新换一批、跨天自动重置
 function todayKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
@@ -394,6 +394,7 @@ function renderPool(){
   if(!list.length){ $('#poolTable tbody').innerHTML='<tr><td colspan="8" class="empty">无匹配记录</td></tr>'; return; }
   $('#poolTable tbody').innerHTML=list.map(r=>{
     const s=statusOf(r); const badge=r.category==='央国企'?'badge-soe':'badge-net';
+    const stcls=s.key==='closed'?'st-closed':s.key==='urgent'?'st-urgent':'st-open';
     const inJobs=POSITIONS.some(p=>p.srcId===r.id);
     return `<tr>
       <td><b>${esc(r.org)}</b></td>
@@ -429,7 +430,7 @@ $('#btnRefresh').addEventListener('click',()=>{
 /* ============ 岗位管理 ============ */
 const STATUSES=['未投递','已投递','笔试中','面试中','offer','已拒绝'];
 function renderPipeline(){
-  const counts={}; STATUSES.s=0; STATUSES.forEach(s=>counts[s]=0); POSITIONS.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
+  const counts={}; STATUSES.forEach(s=>counts[s]=0); POSITIONS.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
   const map={'未投递':'待投递','已投递':'已投','笔试中':'笔试','面试中':'面试','offer':'Offer','已拒绝':'已拒'};
   $('#pipeline').innerHTML=STATUSES.map(s=>`<div class="stage"><b>${counts[s]}</b>${map[s]}</div>`).join('');
 }
@@ -438,7 +439,7 @@ function currentJobList(){
   return POSITIONS.filter(p=>(!f||p.status===f)&&(!kw||(p.org+p.position).toLowerCase().includes(kw)));
 }
 function renderJobs(){
-  rpcnt=0;
+  renderPipeline();
   const list=currentJobList();
   if(!list.length){ $('#jobsTable tbody').innerHTML='<tr><td colspan="7" class="empty">暂无岗位，去「信息池看板」一键录入或手动新增</td></tr>'; return; }
   $('#jobsTable tbody').innerHTML=list.map(p=>{
@@ -451,11 +452,12 @@ function renderJobs(){
       <td class="${stcls}">${p.deadline?esc(p.deadline):'<span class="muted">待公布</span>'}</td>
       <td><select data-st="${p.id}">${sel}</select></td>
       <td class="muted">${esc(p.note||'')}</td>
-      <td><button class="btn sm ghost" data-note="${p.id}">备注</button> <button class="btn sm" style="background:#F3D9D3;color:#B23A26" data-del="${p.id}">删除</button></td>
+      <td><button class="btn sm ghost" data-note="${p.id}">备注</button> <button class="btn sm" data-del="${p.id}" style="background:#F3D9D3;color:#B23A26">删除</button></td>
+    </tr>`;
   }).join('');
   $$('#jobsTable [data-st]').forEach(s=>s.addEventListener('change',()=>{ const p=POSITIONS.find(x=>x.id===s.dataset.st); p.status=s.value; LS.set('qz_positions',POSITIONS); renderPipeline(); const added=ensureInterviewFor(p); if(added){ LS.set('qz_interviews',INTERVIEWS); renderInterviews(); toast('状态→'+p.status+' · 已自动建「一面」'); } else { toast('状态→'+p.status); } }));
   $$('#jobsTable [data-note]').forEach(b=>b.addEventListener('click',()=>{ const p=POSITIONS.find(x=>x.id===b.dataset.note); const v=prompt('备注（进度/HR/渠道等）：',p.note||''); if(v!==null){ p.note=v; LS.set('qz_positions',POSITIONS); renderJobs(); } }));
-  $$('#jobsTable [data-del]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('确认删除该岗位记录？')){ POSITIONS=POSITIONS.filter(x=>x.id===b.dataset.del); LS.set('qz_positions',POSITIONS); renderJobs(); } }));
+  $$('#jobsTable [data-del]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('确认删除该岗位记录？')){ POSITIONS=POSITIONS.filter(x=>x.id!==b.dataset.del); LS.set('qz_positions',POSITIONS); renderJobs(); } }));
 }
 $('#jfStatus').addEventListener('change',renderJobs);
 $('#jfSearch').addEventListener('input',renderJobs);
@@ -467,7 +469,7 @@ $('#btnCopyJobs').addEventListener('click',()=>{
   const lines=['| '+head.join(' | ')+' |','|'+head.map(()=>' --- ').join('|')+'|'];
   list.forEach(p=>lines.push('| '+[p.org,p.position,p.category,p.batch,p.deadline||'待公布',p.status,p.note,p.source,p.url].map(cell).join(' | ')+' |'));
   const counts={}; list.forEach(p=>counts[p.status]=(counts[p.status]||0)+1);
-  const sum=STATUSES.filter(s=>counts[s]).map(s=>s+' '+counts[s]).map(cell).join(' · ');
+  const sum=STATUSES.filter(s=>counts[s]).map(s=>s+' '+counts[s]).join(' · ');
   const out='岗位管理 · 共 '+list.length+' 条（'+sum+'）｜导出于 '+new Date().toISOString().slice(0,10)+'\n\n'+lines.join('\n');
   copyText(out, list.length+' 条岗位行（Markdown 表格）');
 });
@@ -508,7 +510,7 @@ function renderInterviews(){
     </div>`;
   }).join('');
   $$('#interviewList [data-ivi]').forEach(b=>b.addEventListener('click',()=>editInterview(b.dataset.ivi)));
-  $$('#interviewList [data-ivd]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('删除该面试记录？')){ INTERVIEWS=INTERVIEWS.filter(x=>x.id===b.dataset.ivd); LS.set('qz_interviews',INTERVIEWS); renderInterviews(); }}));
+  $$('#interviewList [data-ivd]').forEach(b=>b.addEventListener('click',()=>{ if(confirm('删除该面试记录？')){ INTERVIEWS=INTERVIEWS.filter(x=>x.id!==b.dataset.ivd); LS.set('qz_interviews',INTERVIEWS); renderInterviews(); }}));
 }
 $('#btnAddInterview').addEventListener('click',()=>editInterview(null));
 function editInterview(id){
@@ -538,7 +540,7 @@ function ensureInterviewFor(p){
   INTERVIEWS.unshift({id:uid(),jobId:p.id,date:new Date().toISOString().slice(0,10),round:'一面',form:'视频',qa:'',review:'',result:'待定'});
   return true;
 }
-// 初始化时补齐：无论状态是 UI 改的、打log=0，只要「面试中」且缺记录就建（幂等）
+// 初始化时补齐：无论状态是 UI 改的、import 导入的、还是手动改的 localStorage，只要「面试中」且缺记录就建（幂等）
 function syncInterviews(){
   let added=0; POSITIONS.forEach(p=>{ if(ensureInterviewFor(p)) added++; });
   if(added) LS.set('qz_interviews',INTERVIEWS);
