@@ -40,10 +40,10 @@
   .stat .l{color:var(--muted);font-size:12px}
   .stat.coral .n{color:var(--coral-d)}.stat.soe .n{color:var(--purple-deep)}.stat.purple{background:linear-gradient(135deg,#F3ECFB,#E7DEF7)}
   .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
-  select,input,textarea{font-family:var(--sans);font-size:14px;padding:8px 10px;border:1px var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  select,input,textarea{font-family:var(--sans);font-size:14px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
   input:focus,textarea:focus,select:focus{outline:2px solid var(--purple-d);border-color:var(--purple-d)}
   textarea{resize:vertical;width:100%}
-  .btn{border:0;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:600;background:var(--purple-deep);color:#fff;transition:transform 150px var(--ease-out),background-color 150ms ease,filter 150ms ease}
+  .btn{border:0;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:600;background:var(--purple-deep);color:#fff;transition:transform 150ms var(--ease-out),background-color 150ms ease,filter 150ms ease}
   .btn:hover{filter:brightness(1.07)}.btn:active{transform:scale(0.97)}
   .btn.coral{background:var(--coral)}.btn.coral:hover{background:var(--coral-d)}.btn.coral:active{transform:scale(0.97)}
   .btn.ghost{background:#fff;color:var(--purple-deep);border:1px solid var(--purple-d)}
@@ -146,5 +146,5 @@
 <script src="recruit-seed.js"></script>
 <script>
 /* ============ 内嵌信息池数据（单文件自包含） ============ */
-window.__RECRUIT_DATA__ = PLACEHOLDER_JSON;
-PLACEHOLDER_TAIL
+window.__RECRUIT_DATA__ = __JSON__;
+__TAIL__
